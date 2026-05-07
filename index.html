@@ -133,9 +133,32 @@
         .action-badge { display: inline-block; background-color: var(--ink); color: white; font-size: 0.85rem; padding: 2px 8px; border-radius: 4px; margin-bottom: 4px; font-weight: bold; }
 
         .floating-tools { position: absolute; bottom: 80px; right: 2rem; display: flex; gap: 10px; z-index: 70; }
-        .tool-btn { background: white; border: 2px solid var(--ink); border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; cursor: pointer; box-shadow: 2px 2px 0px var(--ink); transition: all 0.2s; }
+        .tool-btn { 
+            background: white; border: 2px solid var(--ink); border-radius: 50%; 
+            width: 55px; height: 55px; display: flex; justify-content: center; 
+            align-items: center; font-size: 1.5rem; cursor: pointer; 
+            box-shadow: 3px 3px 0px var(--ink); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            position: relative;
+        }
+        .tool-btn:hover { transform: scale(1.1); }
         .tool-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--ink); }
-        .tool-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .tool-btn.active { 
+            background: var(--accent); color: white; border-color: var(--accent); 
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.5);
+            animation: pulse-focus 2s infinite;
+        }
+        
+        @keyframes pulse-focus {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        /* 畫筆對焦游標 */
+        #drawCanvas.active { 
+            pointer-events: auto; 
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="%23e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l5 5"></path><path d="M9.5 14.5L16 8"></path></svg>') 0 32, crosshair; 
+        }
 
         .modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.8); z-index: 100; justify-content: center; align-items: center; }
         .modal-overlay.show { display: flex; animation: fadeIn 0.3s; }
@@ -168,7 +191,14 @@
         <!-- 浮動工具列 -->
         <div class="floating-tools">
             <button id="clearBtn" class="tool-btn" title="清除畫面" style="display:none;">🗑️</button>
-            <button id="drawToggleBtn" class="tool-btn" title="開啟/關閉畫筆">🖍️</button>
+            <button id="drawToggleBtn" class="tool-btn" title="開啟/關閉畫筆">
+                <svg id="penIcon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                    <path d="M2 2l5 5"></path>
+                    <path d="M9.5 14.5L16 8"></path>
+                </svg>
+            </button>
         </div>
 
         <!-- 簡報顯示區 -->
@@ -645,7 +675,12 @@
             drawToggleBtn.classList.toggle('active');
             canvas.classList.toggle('active');
             clearBtn.style.display = isDrawingMode ? 'flex' : 'none';
-            drawToggleBtn.innerText = isDrawingMode ? '❌' : '🖍️';
+            // 切換圖示顏色與對焦效果
+            if (isDrawingMode) {
+                drawToggleBtn.innerHTML = '<span style="font-size: 1.2rem; font-weight: bold;">✕</span>';
+            } else {
+                drawToggleBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l5 5"></path><path d="M9.5 14.5L16 8"></path></svg>';
+            }
         });
 
         clearBtn.addEventListener('click', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
