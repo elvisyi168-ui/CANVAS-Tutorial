@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Canvas 長照實戰班手繪簡報</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#2c3e50',
+                        paper: '#f4f1ea',
+                        accent: '#e74c3c',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #2c3e50;
+            --paper: #f4f1ea;
+            --accent: #e74c3c;
+        }
+
+        body {
+            font-family: 'LXGW WenKai TC', cursive;
+            background-color: #e5e1d8;
+            color: var(--ink);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 點陣紙張背景 */
+        .presentation-container {
+            width: 95%;
+            max-width: 1000px;
+            height: 90vh;
+            max-height: 750px;
+            background-color: var(--paper);
+            background-image: radial-gradient(#d5d0c4 1px, transparent 1px);
+            background-size: 20px 20px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slides-wrapper {
+            flex: 1;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+        }
+
+        #drawCanvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 50; pointer-events: none;
+        }
+        #drawCanvas.active { pointer-events: auto; cursor: crosshair; }
+
+        .controls {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2.5rem;
+            background: white;
+            border-top: 2px dashed rgba(44, 62, 80, 0.2);
+            z-index: 60; position: relative;
+        }
+
+        .sketch-box {
+            background: rgba(255, 255, 255, 0.7);
+            border: 2px solid var(--ink);
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            padding: 1.2rem;
+            box-shadow: 3px 3px 0px rgba(44, 62, 80, 0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .sketch-box:hover {
+            box-shadow: 5px 5px 0px rgba(44, 62, 80, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .sticky-note {
+            background: #fef08a; border: 1px solid #eab308;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+            padding: 1rem; position: relative;
+        }
+        .sticky-tape {
+            position: absolute; top: -10px; left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 60px; height: 25px;
+            background-color: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .highlighter { background: linear-gradient(104deg, rgba(255,250,118,0) 0.9%, rgba(255,250,118,0.8) 2.4%, rgba(255,250,118,0.8) 5.8%, rgba(255,250,118,0.8) 93%, rgba(255,250,118,0) 96%); padding: 0 4px; }
+        .highlighter-blue { background: linear-gradient(104deg, rgba(173,216,230,0) 0.9%, rgba(173,216,230,0.8) 2.4%, rgba(173,216,230,0.8) 5.8%, rgba(173,216,230,0.8) 93%, rgba(173,216,230,0) 96%); padding: 0 4px; }
+        .highlighter-pink { background: linear-gradient(104deg, rgba(255,192,203,0) 0.9%, rgba(255,192,203,0.8) 2.4%, rgba(255,192,203,0.8) 5.8%, rgba(255,192,203,0.8) 93%, rgba(255,192,203,0) 96%); padding: 0 4px; }
+
+        .slide { display: none; width: 100%; padding: 2rem; animation: fadeIn 0.4s ease-in-out; }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .slide-content { width: 100%; max-width: 850px; padding: 1rem 0; z-index: 10; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .nav-btn {
+            background: none; border: 2px solid var(--ink);
+            border-radius: 20px 5px 15px 5px / 5px 15px 5px 20px;
+            padding: 0.4rem 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.2s;
+        }
+        .nav-btn:hover:not(:disabled) { background: var(--ink); color: white; }
+
+        .title-underline::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 6px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0,5 Q50,0 100,5 T200,5" stroke="%23e74c3c" stroke-width="3" fill="none"/></svg>') repeat-x;
+            background-size: 50px 100%;
+        }
+        
+        .action-badge { display: inline-block; background-color: var(--ink); color: white; font-size: 0.85rem; padding: 2px 8px; border-radius: 4px; margin-bottom: 4px; font-weight: bold; }
+
+        .floating-tools { position: absolute; bottom: 80px; right: 2rem; display: flex; gap: 10px; z-index: 70; }
+        .tool-btn { background: white; border: 2px solid var(--ink); border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; cursor: pointer; box-shadow: 2px 2px 0px var(--ink); transition: all 0.2s; }
+        .tool-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--ink); }
+        .tool-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+        .modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.8); z-index: 100; justify-content: center; align-items: center; }
+        .modal-overlay.show { display: flex; animation: fadeIn 0.3s; }
+
+        .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; opacity: 0; z-index: 90;}
+        
+        /* 互動彩蛋特效 CSS */
+        .fly-away { animation: fly 1.5s ease-in-out forwards; pointer-events: none; }
+        @keyframes fly { 
+            0% { transform: translate(0, 0) rotate(-1deg); } 
+            20% { transform: translate(-20px, 20px) rotate(-10deg); }
+            100% { transform: translate(1500px, -1000px) rotate(45deg) scale(0.5); } 
+        }
+
+        .typewriter { overflow: hidden; border-right: .15em solid #e74c3c; white-space: pre-wrap; animation: typing 2.5s steps(40, end), blink-caret .75s step-end infinite; }
+        @keyframes typing { from { max-height: 0; opacity: 0; } to { max-height: 500px; opacity: 1; } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #e74c3c; } }
+        
+        .interactive-btn { transition: all 0.2s; border-bottom: 4px solid rgba(0,0,0,0.2); }
+        .interactive-btn:active { transform: translateY(4px); border-bottom: 0px; }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-container">
+        
+        <!-- 畫筆圖層 -->
+        <canvas id="drawCanvas"></canvas>
+
+        <!-- 浮動工具列 -->
+        <div class="floating-tools">
+            <button id="clearBtn" class="tool-btn" title="清除畫面" style="display:none;">🗑️</button>
+            <button id="drawToggleBtn" class="tool-btn" title="開啟/關閉畫筆">🖍️</button>
+        </div>
+
+        <!-- 簡報顯示區 -->
+        <div class="slides-wrapper" id="slidesWrapper">
+            
+            <!-- Slide 1: 封面 -->
+            <div class="slide active" id="slide-1">
+                <div class="slide-content text-center space-y-4 relative">
+                    <div class="sketch-box p-10 transform -rotate-1 bg-white inline-block hover:rotate-0 transition-transform relative z-10">
+                        <!-- 彩蛋 1：可飛走的火箭 -->
+                        <div class="text-7xl mb-4 animate-bounce cursor-pointer relative group inline-block" onclick="this.classList.add('fly-away')" title="點擊發射！">
+                            🚀
+                            <span class="absolute -right-12 -top-4 text-sm bg-yellow-200 text-black px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">點我發射!</span>
+                        </div>
+                        <h1 class="text-4xl font-bold mb-2">
+                            <span class="highlighter">Gemini Canvas</span><br>
+                            <span class="title-underline text-3xl mt-4 block">長照 AI 生產力全指南</span>
+                        </h1>
+                        <p class="text-xl text-gray-700 mt-6 italic">帶你一步步點擊，把 AI 變成最強行政助理 ✍️</p>
+                        <div class="mt-8 text-sm text-red-600 font-bold tracking-widest border-t border-dashed pt-4">互動實戰講義 (右下角可開啟畫筆喔！)</div>
+                    </div>
+                    
+                    <div class="mt-8 pt-2">
+                        <span class="inline-block text-gray-500 border border-dashed border-gray-400 px-4 py-1.5 text-sm rounded-lg relative z-10 bg-white/50 opacity-80 hover:opacity-100 transition-opacity cursor-default">
+                            👨‍🏫 講師：易庭匡 督導
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: 模組一：協作新思維 -->
+            <div class="slide" id="slide-2">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-8 title-underline">📌 模組一：Canvas 是什麼？怎麼開？</h2>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="sketch-box bg-white p-6">
+                            <h3 class="font-bold text-xl mb-3 flex items-center">🤖 雙視窗即時互動</h3>
+                            <p class="text-gray-600 leading-relaxed">左邊負責下達指令溝通，右邊畫布直接顯示並讓你編輯最終文件，不用再辛苦複製貼上。</p>
+                        </div>
+                        <div class="sketch-box bg-white p-6">
+                            <h3 class="font-bold text-xl mb-3 flex items-center">📄 長文處理首選</h3>
+                            <p class="text-gray-600 leading-relaxed">專門設計用來處理超過 <span class="font-bold text-red-500 text-xl">500 字</span> 的評鑑資料、複雜企劃案與程式碼。</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 sticky-note mx-auto max-w-lg shadow-md cursor-pointer hover:scale-105 transition-transform" onclick="alert('沒錯！實體按鈕通常會出現在 AI 回答的下方唷！')">
+                        <div class="sticky-tape"></div>
+                        <p class="font-bold text-lg mb-2">👉 實際操作步驟：如何召喚畫布？</p>
+                        <ul class="list-decimal pl-5 space-y-1 text-gray-800">
+                            <li>方式一：在對話框輸入 <span class="text-blue-600 font-bold">「幫我開啟畫布撰寫...」</span> 或 <span class="text-blue-600 font-bold">「打開文件」</span></li>
+                            <li>方式二：在一般生成的回答下方，點選 <span class="text-blue-600 font-bold">「在 Canvas 中開啟」</span> 的實體按鈕。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: 模組二：PARTS 公式 -->
+            <div class="slide" id="slide-3">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-8 title-underline">🎯 模組二：萬用 PARTS 公式</h2>
+                    <p class="text-lg text-gray-700 mb-4">別讓 AI 猜你的心！指令請包含這五大要素：</p>
+                    <div class="sketch-box bg-white p-6 space-y-4">
+                        <div class="flex gap-4 items-center hover:bg-blue-50 p-2 rounded transition-colors">
+                            <span class="bg-blue-600 text-white w-10 h-10 rounded-full flex justify-center items-center font-bold text-xl shrink-0">P</span>
+                            <p class="text-lg"><span class="font-bold text-blue-700">Persona (角色)：</span> 「請扮演長照機構資深護理長」</p>
+                        </div>
+                        <div class="flex gap-4 items-center hover:bg-green-50 p-2 rounded transition-colors">
+                            <span class="bg-green-600 text-white w-10 h-10 rounded-full flex justify-center items-center font-bold text-xl shrink-0">A</span>
+                            <p class="text-lg"><span class="font-bold text-green-700">Act (行動)：</span> 「將以下碎片的交班紀錄改寫成報告」</p>
+                        </div>
+                        <div class="flex gap-4 items-center hover:bg-yellow-50 p-2 rounded transition-colors">
+                            <span class="bg-yellow-600 text-white w-10 h-10 rounded-full flex justify-center items-center font-bold text-xl shrink-0">R</span>
+                            <p class="text-lg"><span class="font-bold text-yellow-700">Recipient (對象)：</span> 「這份報告是要給外部評鑑委員看的」</p>
+                        </div>
+                        <div class="flex gap-4 items-center hover:bg-red-50 p-2 rounded transition-colors">
+                            <span class="bg-red-600 text-white w-10 h-10 rounded-full flex justify-center items-center font-bold text-xl shrink-0">T</span>
+                            <p class="text-lg"><span class="font-bold text-red-700">Theme (主題)：</span> 「重點放在長輩的認知功能變化與跌倒防範」</p>
+                        </div>
+                        <div class="flex gap-4 items-center hover:bg-purple-50 p-2 rounded transition-colors">
+                            <span class="bg-purple-600 text-white w-10 h-10 rounded-full flex justify-center items-center font-bold text-xl shrink-0">S</span>
+                            <p class="text-lg"><span class="font-bold text-purple-700">Structure (結構)：</span> 「請用 PDCA 格式與表格來呈現」</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: 模組三：快捷工具箱 (加入實境模擬器) -->
+            <div class="slide" id="slide-4">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-4 title-underline">🛠️ 模組三：畫布專屬「快捷工具箱」</h2>
+                    <div class="bg-yellow-100 border-l-4 border-yellow-500 p-2 mb-4 font-bold text-gray-800 text-sm">
+                        ⚠️ 核心心法：請先用滑鼠「反白」要修改的文字，再點擊工具，AI 就不會亂動其他段落！
+                    </div>
+                    
+                    <!-- 彩蛋 2：實體工具模擬器 -->
+                    <div class="sketch-box bg-gray-50 p-5 mb-4 border-2 border-dashed border-blue-300 relative">
+                        <div class="absolute -top-3 -right-3 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold transform rotate-12 shadow">動手點點看!</div>
+                        <h3 class="text-sm text-gray-500 font-bold mb-2">👇 講師展示區：點擊按鈕，模擬 Canvas 工具列魔法</h3>
+                        <p id="demoText" class="text-lg font-bold text-gray-800 bg-white p-4 rounded shadow-inner min-h-[100px] flex items-center transition-all duration-300">
+                            阿公今天中午吃飯不太乖，菜都吐出來。下午玩拼圖一直拼錯就生氣了。
+                        </p>
+                        <div class="flex flex-wrap gap-2 mt-4 justify-center">
+                            <button onclick="updateDemoText('short')" class="interactive-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full">📏 縮短</button>
+                            <button onclick="updateDemoText('long')" class="interactive-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full">📏 擴充</button>
+                            <button onclick="updateDemoText('pro')" class="interactive-btn bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-2 px-4 rounded-full">🗣️ 專業口吻</button>
+                            <button onclick="updateDemoText('warm')" class="interactive-btn bg-pink-100 hover:bg-pink-200 text-pink-800 font-bold py-2 px-4 rounded-full">🗣️ 溫暖口吻</button>
+                            <button onclick="updateDemoText('reset')" class="interactive-btn bg-white border border-gray-300 hover:bg-gray-100 text-gray-600 font-bold py-2 px-4 rounded-full ml-auto">🔄 還原</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div class="sketch-box bg-white p-3">
+                            <div class="action-badge">右上角按鈕</div>
+                            <h3 class="font-bold mb-1">🔄 版本回溯 (History)</h3>
+                            <p class="text-gray-600 text-xs">點擊「時鐘圖示」隨時復原到滿意的版本。</p>
+                        </div>
+                        <div class="sketch-box bg-white p-3">
+                            <div class="action-badge">右上角按鈕</div>
+                            <h3 class="font-bold mb-1">📤 一鍵匯出 (Export)</h3>
+                            <p class="text-gray-600 text-xs">點擊「分享圖示」直接匯出至 Google Docs。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: 模組四：長照實戰情境 (加入優化特效) -->
+            <div class="slide" id="slide-5">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-8 title-underline">👩‍⚕️ 模組四：長照實戰場景</h2>
+                    <div class="space-y-6">
+                        
+                        <div class="sketch-box bg-pink-50 p-6 border-pink-200 relative group overflow-hidden">
+                            <h3 class="font-bold text-2xl text-pink-700 mb-3 flex items-center">
+                                <span class="mr-2">📝</span> 臨床組：ISP 與個案紀錄優化
+                            </h3>
+                            
+                            <!-- 彩蛋 3：一鍵優化特效區 -->
+                            <div class="bg-white p-4 border border-pink-300 rounded relative min-h-[120px]">
+                                <div id="badIsp" class="text-gray-600 text-lg transition-all duration-500">
+                                    [隨手筆記] 阿公今天一直說要找老伴，中午吃飯吐掉一口青菜，下午參加拼圖活動一直把邊邊拼錯，然後突然生氣。
+                                </div>
+                                <div id="goodIsp" class="hidden mt-2">
+                                    <span class="text-xs font-bold text-pink-500 border border-pink-500 rounded px-1 mb-1 inline-block">轉換為專業術語...</span>
+                                    <div class="text-pink-800 font-bold text-lg typewriter leading-relaxed">
+                                        個案今日出現疑似尋人行為（尋找配偶）。午餐進食量略減，有吐食狀況。下午參與認知拼圖活動時，空間建構能力表現受挫，伴隨突發性情緒躁動，需持續觀察認知與情緒起伏。
+                                    </div>
+                                </div>
+                                <button id="magicBtn" onclick="runMagicIsp()" class="interactive-btn absolute right-3 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-pink-500 to-red-500 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:scale-105 z-10">
+                                    ✨ 點我施展魔法
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="sketch-box bg-blue-50 p-6 border-blue-200">
+                            <h3 class="font-bold text-2xl text-blue-700 mb-3 flex items-center">
+                                <span class="mr-2">📂</span> 行政組：評鑑資料與政策公告
+                            </h3>
+                            <p class="text-lg text-gray-700 leading-relaxed mb-2">
+                                貼入政府厚重的政策公文草稿。
+                            </p>
+                            <div class="bg-white p-3 border border-blue-300 rounded text-blue-900 font-bold shadow-inner">
+                                👉 指令：「從這份公文中提煉 PDCA 執行計畫表，並另成一篇給家屬閱讀的白話文懶人包。」
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: 進階魔法 (加入 Vibe Coding 體驗) -->
+            <div class="slide" id="slide-6">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-6 title-underline">🪄 模組五：進階魔法 (產出簡報與網頁)</h2>
+                    <div class="flex flex-col space-y-4">
+                        <div class="sketch-box p-5 bg-white border-yellow-200 shadow-sm">
+                            <h3 class="text-2xl font-bold text-yellow-700 mb-2 flex items-center">📽️ 數分鐘產出精美簡報 (Slides)</h3>
+                            <div class="bg-gray-100 p-2 text-sm rounded border-l-4 border-yellow-500">
+                                <span class="action-badge bg-yellow-600">實作步驟</span> 上傳企劃案 ➡️ 輸入指令：「<span class="font-bold text-yellow-700">請從此檔案建立一份摘要簡報</span>」 ➡️ 生成投影片 ➡️ 點擊右下角「匯出至 Google 簡報」。
+                            </div>
+                        </div>
+                        
+                        <div class="sketch-box p-5 bg-purple-50 border-purple-300 shadow-md relative">
+                            <div class="absolute -right-4 -top-4 text-4xl transform rotate-12 animate-pulse">🎮</div>
+                            <h3 class="text-2xl font-bold text-purple-700 mb-2 flex items-center">💻 Vibe Coding：免寫程式產出互動遊戲</h3>
+                            <p class="text-gray-700 mb-3 font-bold">指令：「幫我做一個長輩猜成語的網頁遊戲」</p>
+                            
+                            <!-- 彩蛋 4：Vibe Coding 實體遊戲按鈕 -->
+                            <button onclick="openGame()" class="interactive-btn bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full shadow-lg w-full text-lg flex justify-center items-center gap-2">
+                                🕹️ 點擊預覽：試玩 AI 生成的成語遊戲！
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: 隱藏大絕招 (互動測驗) -->
+            <div class="slide" id="slide-7">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-3 title-underline">🌟 模組六：Canvas 右上角「Create」大絕招</h2>
+                    <p class="text-lg text-gray-700 mb-4 tracking-wide">注意 Canvas 右上角的「Create (建立)」按鈕，裡面藏著長照機構必學的殺手鐧：</p>
+                    <div class="flex flex-col space-y-4">
+                        <div class="sketch-box p-4 bg-white border-green-200 shadow-sm">
+                            <h3 class="text-xl font-bold text-green-700 mb-1 flex justify-between">
+                                <span>📊 數據一鍵變儀表板 (Infographic)</span>
+                                <span class="action-badge bg-green-600 text-xs">Create ➡️ 圖表</span>
+                            </h3>
+                            <p class="text-gray-600">貼上長輩血壓數據或排班表，行政報告瞬間升級成精美圓餅圖/折線圖！</p>
+                        </div>
+                        
+                        <!-- 互動測驗卡片 -->
+                        <div class="sketch-box p-4 bg-pink-50 border-pink-300 shadow-md relative overflow-hidden">
+                            <div class="absolute -right-6 -top-6 bg-pink-500 text-white w-20 h-20 rounded-full flex items-end justify-center pb-2 font-bold text-sm transform rotate-45">互動!</div>
+                            <h3 class="text-xl font-bold text-pink-700 mb-1 flex justify-between items-center">
+                                <span>📝 互動式教育測驗 (Quiz)</span>
+                            </h3>
+                            <p class="text-gray-700 mb-3">丟入感控手冊，點擊 Create 生成員工隨堂考。右側能直接作答對答案！</p>
+                            <button onclick="openQuiz()" class="interactive-btn bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded shadow w-full">
+                                👉 點擊這裡，講師帶你立刻體驗！
+                            </button>
+                        </div>
+
+                        <div class="sketch-box p-4 bg-white border-blue-200 shadow-sm">
+                            <h3 class="text-xl font-bold text-blue-700 mb-1 flex justify-between">
+                                <span>🌐 跨國照服員溝通神器 (反白技巧)</span>
+                                <span class="action-badge bg-blue-600 text-xs">反白 ➡️ 翻譯</span>
+                            </h3>
+                            <p class="text-gray-600">反白中文 SOP ➡️ 指令：「<span class="font-bold text-blue-700">精準翻譯成印、越文對照表格</span>」，零障礙培訓同仁。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: 模組七：資安紅線 -->
+            <div class="slide" id="slide-8">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-8 title-underline text-center w-full block">🛡️ 模組七：資安紅線與 AI 素養</h2>
+                    
+                    <div class="sketch-box border-red-500 bg-red-50 p-8 text-center mb-8 transform -rotate-1 mx-auto max-w-2xl hover:rotate-0 transition-transform">
+                        <h3 class="text-3xl font-bold text-red-600 mb-4 flex justify-center items-center">
+                            <span class="mr-3 animate-pulse">🚫</span> 絕對不可踩的紅線
+                        </h3>
+                        <p class="text-xl font-bold">嚴禁輸入真實姓名、身分證字號、詳細病歷或住址！</p>
+                        <p class="text-gray-500 mt-2">請守護長輩的隱私安全。</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6 max-w-3xl mx-auto">
+                        <div class="sticky-note -rotate-2 hover:rotate-0 transition-transform">
+                            <div class="sticky-tape"></div>
+                            <h4 class="font-bold text-xl mb-2 text-center underline text-blue-800">✅ 去識別化技巧</h4>
+                            <p class="text-lg text-center leading-relaxed">使用「個案 A」、「住民 B」<br>等代號替代真實姓名，<br>確保安全後再交給 AI 改寫。</p>
+                        </div>
+                        <div class="sticky-note rotate-2 bg-blue-100 border-blue-300 hover:rotate-0 transition-transform">
+                            <div class="sticky-tape"></div>
+                            <h4 class="font-bold text-xl mb-2 text-center underline text-red-800">👁️ 人工校對義務</h4>
+                            <p class="text-lg text-center leading-relaxed">AI 偶爾會產生「幻覺」。<br><span class="text-red-600 font-bold font-serif bg-white px-1">醫療建議、照護法規</span><br>絕對必須經由專業人員最後確認。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: 結語與進階探索 (左右排版縮小版面解決破圖) -->
+            <div class="slide" id="slide-9">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-4 title-underline text-center w-full block">🚀 下一步：打開 AI 宇宙的大門</h2>
+                    <p class="text-lg text-gray-700 mb-5 tracking-wide text-center">Canvas 只是基礎！想掌握更強大的玩法，請探索 Google 進階法寶：</p>
+                    
+                    <div class="flex flex-col md:flex-row gap-6 max-w-5xl mx-auto">
+                        <!-- 左側：工具介紹 -->
+                        <div class="flex-1 flex flex-col justify-center space-y-4">
+                            <div class="sketch-box bg-blue-50 border-blue-300 p-4 hover:-translate-y-1 transition-transform">
+                                <h3 class="text-lg font-bold text-blue-800 mb-1 flex items-center">
+                                    <span class="mr-2 text-2xl">🛠️</span> 
+                                    <div>
+                                        Google AI Studio<br>
+                                        <span class="text-xs font-normal text-gray-500">開發者級別的微調基地</span>
+                                    </div>
+                                </h3>
+                                <p class="text-gray-700 text-sm leading-relaxed">
+                                    想要自己設定專屬的「系統提示詞」？在這裡將它打造成專屬長照助理！
+                                </p>
+                            </div>
+                            <div class="sketch-box bg-purple-50 border-purple-300 p-4 hover:-translate-y-1 transition-transform">
+                                <h3 class="text-lg font-bold text-purple-800 mb-1 flex items-center">
+                                    <span class="mr-2 text-2xl">🌌</span> 
+                                    <div>
+                                        Project Antigravity<br>
+                                        <span class="text-xs font-normal text-gray-500">探索未來的 AI 互動</span>
+                                    </div>
+                                </h3>
+                                <p class="text-gray-700 text-sm leading-relaxed">
+                                    突破傳統對話視窗限制，探索 AI Agent 機制，看見協作的無限可能！
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 右側：內嵌 YouTube 影片 -->
+                        <div class="flex-1 flex flex-col justify-center">
+                            <div class="sketch-box p-4 bg-white w-full border-dashed border-2 border-gray-400 relative">
+                                <div class="absolute -left-3 -top-3 text-3xl transform -rotate-12">📺</div>
+                                <h4 class="font-bold text-md mb-2 text-center text-gray-800">課後自我增進 (推薦影片)</h4>
+                                
+                                <div class="w-full aspect-video rounded-lg overflow-hidden shadow-inner border border-gray-200">
+                                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/2hbYCe_E5aU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                                </div>
+                                
+                                <div class="text-center mt-3">
+                                    <a href="https://www.youtube.com/watch?v=2hbYCe_E5aU&list=PLWWZkn1dW3eAvSZfJv0-02q27JIsfbN2f" target="_blank" class="inline-block text-blue-600 hover:text-blue-800 font-bold text-sm bg-blue-50 px-4 py-1.5 rounded-full transition-colors hover:bg-blue-100">
+                                        👉 點此開啟 YouTube 完整清單
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 完課祝賀詞 -->
+                    <div class="mt-6 text-center text-red-600 font-bold text-xl animate-bounce" id="finishText" style="display:none;">
+                        ✨ 恭喜完成培訓！準備好用 AI 顛覆長照工作了嗎？ ✨
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- /slides-wrapper -->
+
+        <!-- 底部控制列 -->
+        <div class="controls">
+            <button class="nav-btn" id="prevBtn" disabled>
+                <span>👈</span> 上一頁
+            </button>
+            <div class="flex gap-3" id="dotsContainer"></div>
+            <button class="nav-btn" id="nextBtn">
+                下一頁 <span>👉</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Modal 1: 互動測驗 -->
+    <div id="quizModal" class="modal-overlay">
+        <div class="sketch-box bg-white p-8 max-w-md w-full relative">
+            <button onclick="document.getElementById('quizModal').classList.remove('show')" class="absolute top-4 right-4 text-2xl font-bold text-gray-500 hover:text-red-500">×</button>
+            <h2 class="text-2xl font-bold text-pink-600 mb-4 border-b-2 border-pink-200 pb-2">📝 隨堂小測驗</h2>
+            <p class="text-lg font-bold mb-4">Gemini Canvas 最適合用來處理哪種類型的任務？</p>
+            <div class="space-y-3">
+                <button onclick="checkAnswer(false, this)" class="quiz-btn w-full text-left p-3 border-2 border-gray-300 rounded hover:border-pink-400 hover:bg-pink-50 transition-all text-lg">A. 詢問今天的天氣狀況</button>
+                <button onclick="checkAnswer(true, this)" class="quiz-btn w-full text-left p-3 border-2 border-gray-300 rounded hover:border-pink-400 hover:bg-pink-50 transition-all text-lg">B. 處理 500 字以上的長篇評鑑資料</button>
+                <button onclick="checkAnswer(false, this)" class="quiz-btn w-full text-left p-3 border-2 border-gray-300 rounded hover:border-pink-400 hover:bg-pink-50 transition-all text-lg">C. 翻譯一句簡單的英文單字</button>
+            </div>
+            <div id="quizResult" class="mt-4 text-center font-bold text-xl hidden p-3 rounded"></div>
+        </div>
+    </div>
+
+    <!-- Modal 2: 迷你成語遊戲 (Vibe Coding Demo) -->
+    <div id="gameModal" class="modal-overlay">
+        <div class="sketch-box bg-purple-50 p-8 max-w-sm w-full relative border-purple-400 text-center">
+            <button onclick="document.getElementById('gameModal').classList.remove('show')" class="absolute top-4 right-4 text-2xl font-bold text-gray-500 hover:text-red-500">×</button>
+            <h2 class="text-2xl font-bold text-purple-700 mb-2">🧠 猜成語小遊戲</h2>
+            <p class="text-gray-600 mb-6">這就是 AI 在 5 秒內寫出來的網頁遊戲！</p>
+            
+            <div class="bg-white p-6 rounded-xl shadow-inner mb-6 text-4xl font-bold tracking-widest text-gray-800">
+                一 石 二 <span id="gameBlank" class="text-purple-500 border-b-4 border-purple-500 inline-block w-12 text-center">?</span>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="checkGame('錯', this)" class="interactive-btn bg-gray-200 hover:bg-gray-300 text-2xl font-bold py-3 rounded-lg">兔</button>
+                <button onclick="checkGame('對', this)" class="interactive-btn bg-gray-200 hover:bg-gray-300 text-2xl font-bold py-3 rounded-lg">鳥</button>
+            </div>
+            <div id="gameResult" class="mt-4 font-bold text-xl h-8 text-purple-600"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- 簡報導航邏輯 ---
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const slidesWrapper = document.getElementById('slidesWrapper');
+        let currentSlide = 0;
+
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'w-2.5 h-2.5 rounded-full border-2 border-ink cursor-pointer transition-all';
+            if (index === 0) dot.classList.add('bg-ink', 'scale-125');
+            dot.onclick = () => goToSlide(index);
+            dotsContainer.appendChild(dot);
+        });
+        const dots = dotsContainer.children;
+
+        function updateUI() {
+            slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide));
+            Array.from(dots).forEach((d, i) => {
+                d.classList.toggle('bg-ink', i === currentSlide);
+                d.classList.toggle('scale-125', i === currentSlide);
+            });
+
+            prevBtn.disabled = currentSlide === 0;
+            if (currentSlide === slides.length - 1) {
+                nextBtn.innerHTML = '重新開始 <span>🔄</span>';
+                document.getElementById('finishText').style.display = 'block';
+                fireConfetti(); // 觸發撒花
+            } else {
+                nextBtn.innerHTML = '下一頁 <span>👉</span>';
+                document.getElementById('finishText').style.display = 'none';
+            }
+            slidesWrapper.scrollTop = 0;
+        }
+
+        function goToSlide(index) { currentSlide = index; updateUI(); }
+        prevBtn.onclick = () => { if (currentSlide > 0) { currentSlide--; updateUI(); } };
+        nextBtn.onclick = () => {
+            if (currentSlide < slides.length - 1) { currentSlide++; } else { currentSlide = 0; }
+            updateUI();
+        };
+
+        document.onkeydown = (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextBtn.click(); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); prevBtn.click(); }
+        };
+
+        // --- 彩蛋 2：工具模擬器 ---
+        const demoText = document.getElementById('demoText');
+        const originalText = "阿公今天中午吃飯不太乖，菜都吐出來。下午玩拼圖一直拼錯就生氣了。";
+        function updateDemoText(type) {
+            demoText.style.opacity = 0;
+            setTimeout(() => {
+                if (type === 'short') demoText.innerText = "個案中午拒食吐菜；下午拼圖活動受挫伴隨情緒不佳。";
+                if (type === 'long') demoText.innerText = "今日中午協助個案用餐時，觀察到其食慾不佳，有將蔬菜吐出之拒食行為，已先安撫並更換菜色。下午參與認知拼圖活動時，個案因無法正確對齊邊緣而感到受挫，隨後引發較大之情緒反應，已由社工介入安撫。";
+                if (type === 'pro') demoText.innerText = "個案今日午餐出現拒食與吐食行為。下午參與認知拼圖活動時，空間建構能力表現受挫，伴隨突發性情緒躁動，需持續觀察。";
+                if (type === 'warm') demoText.innerText = "阿公今天中午胃口好像不太好，把菜都偷偷吐出來了呢。下午玩拼圖的時候可能因為覺得太難，有點小脾氣，不過我們已經好好安撫他囉，請家屬不用擔心！";
+                if (type === 'reset') demoText.innerText = originalText;
+                demoText.style.opacity = 1;
+            }, 300);
+        }
+
+        // --- 彩蛋 3：ISP 魔法特效 ---
+        function runMagicIsp() {
+            const bad = document.getElementById('badIsp');
+            const good = document.getElementById('goodIsp');
+            const btn = document.getElementById('magicBtn');
+            bad.classList.add('opacity-30', 'line-through');
+            btn.style.display = 'none';
+            setTimeout(() => {
+                good.classList.remove('hidden');
+            }, 500);
+        }
+
+        // --- 彩蛋 4：迷你成語遊戲 ---
+        function openGame() {
+            document.getElementById('gameModal').classList.add('show');
+            document.getElementById('gameBlank').innerText = "?";
+            document.getElementById('gameBlank').className = "text-purple-500 border-b-4 border-purple-500 inline-block w-12 text-center";
+            document.getElementById('gameResult').innerText = "";
+        }
+        function checkGame(ans, btn) {
+            if(ans === '對') {
+                document.getElementById('gameBlank').innerText = "鳥";
+                document.getElementById('gameBlank').className = "text-green-600 border-b-4 border-green-600 inline-block w-12 text-center";
+                document.getElementById('gameResult').innerHTML = "🎉 答對了！阿公好棒！";
+            } else {
+                document.getElementById('gameResult').innerHTML = "❌ 不對喔，再試試看！";
+            }
+        }
+
+        // --- 畫筆功能邏輯 ---
+        const canvas = document.getElementById('drawCanvas');
+        const ctx = canvas.getContext('2d');
+        const drawToggleBtn = document.getElementById('drawToggleBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        let isDrawingMode = false; let isDrawing = false; let lastX = 0; let lastY = 0;
+
+        function resizeCanvas() { canvas.width = slidesWrapper.clientWidth; canvas.height = slidesWrapper.clientHeight; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
+
+        drawToggleBtn.addEventListener('click', () => {
+            isDrawingMode = !isDrawingMode;
+            drawToggleBtn.classList.toggle('active');
+            canvas.classList.toggle('active');
+            clearBtn.style.display = isDrawingMode ? 'flex' : 'none';
+            drawToggleBtn.innerText = isDrawingMode ? '❌' : '🖍️';
+        });
+
+        clearBtn.addEventListener('click', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
+
+        function startDrawing(e) {
+            if (!isDrawingMode) return;
+            isDrawing = true; const rect = canvas.getBoundingClientRect();
+            lastX = (e.clientX || e.touches[0].clientX) - rect.left;
+            lastY = (e.clientY || e.touches[0].clientY) - rect.top;
+        }
+
+        function draw(e) {
+            if (!isDrawing || !isDrawingMode) return;
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const currentX = (e.clientX || e.touches[0].clientX) - rect.left;
+            const currentY = (e.clientY || e.touches[0].clientY) - rect.top;
+
+            ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(currentX, currentY);
+            ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.stroke();
+            lastX = currentX; lastY = currentY;
+        }
+
+        function stopDrawing() { isDrawing = false; }
+
+        canvas.addEventListener('mousedown', startDrawing); canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing); canvas.addEventListener('mouseout', stopDrawing);
+        canvas.addEventListener('touchstart', startDrawing, {passive: false}); canvas.addEventListener('touchmove', draw, {passive: false}); canvas.addEventListener('touchend', stopDrawing);
+
+        // --- 測驗功能邏輯 ---
+        function openQuiz() {
+            document.getElementById('quizModal').classList.add('show');
+            document.getElementById('quizResult').classList.add('hidden');
+            document.querySelectorAll('.quiz-btn').forEach(btn => {
+                btn.className = "quiz-btn w-full text-left p-3 border-2 border-gray-300 rounded hover:border-pink-400 hover:bg-pink-50 transition-all text-lg";
+            });
+        }
+
+        function checkAnswer(isCorrect, btn) {
+            const res = document.getElementById('quizResult');
+            if (isCorrect) {
+                btn.className = "quiz-btn w-full text-left p-3 border-2 border-green-500 bg-green-100 rounded text-lg font-bold text-green-800";
+                res.innerHTML = "🎉 答對了！Canvas 最強的就是處理長文與排版！";
+                res.className = "mt-4 text-center font-bold text-xl p-3 rounded bg-green-200 text-green-800 block";
+            } else {
+                btn.className = "quiz-btn w-full text-left p-3 border-2 border-red-500 bg-red-100 rounded text-lg font-bold text-red-800";
+                res.innerHTML = "❌ 答錯囉！這用一般對話模式就好啦！";
+                res.className = "mt-4 text-center font-bold text-xl p-3 rounded bg-red-200 text-red-800 block";
+            }
+        }
+
+        // --- 撒花特效邏輯 ---
+        function fireConfetti() {
+            const colors = ['#e74c3c', '#3498db', '#f1c40f', '#2ecc71', '#9b59b6'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }`;
+        document.head.appendChild(style);
+
+    </script>
+</body>
+</html>
