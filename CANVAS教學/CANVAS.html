@@ -714,8 +714,19 @@
         downloadBtn.addEventListener('click', () => {
             const container = document.querySelector('.presentation-container');
             const drawCanvas = document.getElementById('drawCanvas');
+            const slidesWrapper = document.getElementById('slidesWrapper');
+            const activeSlide = document.querySelector('.slide.active');
             const originalText = downloadBtn.innerText;
             downloadBtn.innerText = '⏳';
+            
+            // 解決內層捲動導致 html2canvas 跑版（底圖位移）的問題
+            const currentScrollTop = slidesWrapper.scrollTop;
+            const originalOverflow = slidesWrapper.style.overflow;
+            const originalTransform = activeSlide.style.transform;
+            
+            // 鎖定捲動並將捲動量轉換為實體位移，讓 html2canvas 乖乖就範
+            slidesWrapper.style.overflow = 'hidden';
+            activeSlide.style.transform = `translateY(-${currentScrollTop}px)`;
             
             // 解決 html2canvas 對 canvas 座標偏移的 Bug：將 canvas 暫時轉為 img
             const tempImg = document.createElement('img');
@@ -735,7 +746,9 @@
                 backgroundColor: '#e5e1d8',
                 scale: 2 // 提高解析度
             }).then(canvas => {
-                // 復原
+                // 復原所有 DOM 狀態
+                slidesWrapper.style.overflow = originalOverflow;
+                activeSlide.style.transform = originalTransform;
                 container.removeChild(tempImg);
                 drawCanvas.style.display = 'block';
                 downloadBtn.innerText = originalText;
