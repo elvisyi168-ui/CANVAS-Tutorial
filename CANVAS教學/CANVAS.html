@@ -713,18 +713,37 @@
 
         downloadBtn.addEventListener('click', () => {
             const container = document.querySelector('.presentation-container');
+            const drawCanvas = document.getElementById('drawCanvas');
             const originalText = downloadBtn.innerText;
             downloadBtn.innerText = '⏳';
+            
+            // 讓 html2canvas 忽略原來的畫布，我們稍後手動精準疊加，徹底解決跑版問題
+            drawCanvas.setAttribute('data-html2canvas-ignore', 'true');
             
             html2canvas(container, {
                 backgroundColor: '#e5e1d8',
                 scale: 2 // 提高解析度
-            }).then(canvas => {
+            }).then(bgCanvas => {
+                drawCanvas.removeAttribute('data-html2canvas-ignore');
+                downloadBtn.innerText = originalText;
+                
+                // 建立最終的合併畫布
+                const finalCanvas = document.createElement('canvas');
+                finalCanvas.width = bgCanvas.width;
+                finalCanvas.height = bgCanvas.height;
+                const finalCtx = finalCanvas.getContext('2d');
+                
+                // 1. 畫上乾淨的背景 (不含舊畫布的 DOM 畫面)
+                finalCtx.drawImage(bgCanvas, 0, 0);
+                
+                // 2. 畫上使用者的筆跡 (手動等比例放大疊加，保證 100% 對齊)
+                finalCtx.drawImage(drawCanvas, 0, 0, finalCanvas.width, finalCanvas.height);
+                
+                // 觸發下載
                 const link = document.createElement('a');
                 link.download = `Slide_${currentSlide + 1}_Snapshot.png`;
-                link.href = canvas.toDataURL('image/png');
+                link.href = finalCanvas.toDataURL('image/png');
                 link.click();
-                downloadBtn.innerText = originalText;
             });
         });
 
