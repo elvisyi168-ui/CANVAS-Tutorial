@@ -62,6 +62,7 @@
             overflow-y: auto;
             overflow-x: hidden;
             display: flex;
+            flex-direction: column;
         }
 
         #drawCanvas {
@@ -112,8 +113,8 @@
         .highlighter-blue { background: linear-gradient(104deg, rgba(173,216,230,0) 0.9%, rgba(173,216,230,0.8) 2.4%, rgba(173,216,230,0.8) 5.8%, rgba(173,216,230,0.8) 93%, rgba(173,216,230,0) 96%); padding: 0 4px; }
         .highlighter-pink { background: linear-gradient(104deg, rgba(255,192,203,0) 0.9%, rgba(255,192,203,0.8) 2.4%, rgba(255,192,203,0.8) 5.8%, rgba(255,192,203,0.8) 93%, rgba(255,192,203,0) 96%); padding: 0 4px; }
 
-        .slide { display: none; width: 100%; padding: 2rem; animation: fadeIn 0.4s ease-in-out; }
-        .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .slide { display: none; width: 100%; flex-shrink: 0; padding: 2rem; animation: fadeIn 0.4s ease-in-out; }
+        .slide.active { display: flex; flex: 1; flex-direction: column; justify-content: center; align-items: center; }
         .slide-content { width: 100%; max-width: 850px; padding: 1rem 0; z-index: 10; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -231,35 +232,46 @@
                 </div>
             </div>
 
-            <!-- Slide 2: 模組一：協作新思維 -->
+            <!-- Slide 2: Canvas 是什麼？ & vs 一般 AI 聊天 -->
             <div class="slide" id="slide-2">
                 <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-8 title-underline">📌 模組一：Canvas 是什麼？怎麼開？</h2>
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="sketch-box bg-white p-6">
-                            <h3 class="font-bold text-xl mb-3 flex items-center">🤖 雙視窗即時互動</h3>
-                            <p class="text-gray-600 leading-relaxed">左邊負責下達指令溝通，右邊畫布直接顯示並讓你編輯最終文件，不用再辛苦複製貼上。</p>
+                    <h2 class="text-3xl font-bold mb-6 title-underline">📌 Canvas 是什麼？ vs 一般 AI 聊天</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-6 mt-2">
+                        <div class="sketch-box bg-gray-50 border-gray-300 p-5 opacity-80 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-bold text-xl text-gray-700 mb-3 text-center">💬 一般 AI 聊天</h3>
+                                <ul class="space-y-2 text-gray-600 text-sm">
+                                    <li>❌ <span class="font-bold">不易修改：</span>想改一句話，AI 常常重寫整篇。</li>
+                                    <li>❌ <span class="font-bold">難以排版：</span>只能複製文字，排版全跑掉。</li>
+                                    <li>❌ <span class="font-bold">適合短問答：</span>問天氣、查簡單名詞。</li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="sketch-box bg-white p-6">
-                            <h3 class="font-bold text-xl mb-3 flex items-center">📄 長文處理首選</h3>
-                            <p class="text-gray-600 leading-relaxed">專門設計用來處理超過 <span class="font-bold text-red-500 text-xl">500 字</span> 的評鑑資料、複雜企劃案與程式碼。</p>
+                        <div class="sketch-box bg-blue-50 border-blue-300 p-5 scale-105 shadow-md relative">
+                            <div class="absolute -right-3 -top-3 bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold transform rotate-12">今日主角</div>
+                            <h3 class="font-bold text-xl text-blue-700 mb-3 flex items-center justify-center">✨ Gemini Canvas</h3>
+                            <ul class="space-y-2 text-gray-800 text-sm">
+                                <li>✅ <span class="font-bold">雙視窗互動：</span>左邊溝通，右邊編輯文件。</li>
+                                <li>✅ <span class="font-bold">精準修改：</span>反白哪裡就改哪裡，其他不變。</li>
+                                <li>✅ <span class="font-bold">適合長作業：</span>寫公文、評鑑資料、簡報大綱。</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="mt-8 sticky-note mx-auto max-w-lg shadow-md cursor-pointer hover:scale-105 transition-transform" onclick="alert('沒錯！實體按鈕通常會出現在 AI 回答的下方唷！')">
+                    <div class="mt-6 sticky-note mx-auto max-w-lg shadow-md cursor-pointer hover:scale-105 transition-transform" onclick="alert('沒錯！實體按鈕通常會出現在 AI 回答的下方唷！')">
                         <div class="sticky-tape"></div>
-                        <p class="font-bold text-lg mb-2">👉 實際操作步驟：如何召喚畫布？</p>
-                        <ul class="list-decimal pl-5 space-y-1 text-gray-800">
-                            <li>方式一：在對話框輸入 <span class="text-blue-600 font-bold">「幫我開啟畫布撰寫...」</span> 或 <span class="text-blue-600 font-bold">「打開文件」</span></li>
-                            <li>方式二：在一般生成的回答下方，點選 <span class="text-blue-600 font-bold">「在 Canvas 中開啟」</span> 的實體按鈕。</li>
+                        <p class="font-bold text-md mb-2">👉 實際操作步驟：如何召喚畫布？</p>
+                        <ul class="list-decimal pl-5 space-y-1 text-gray-800 text-sm">
+                            <li>方式一：在對話框輸入 <span class="text-blue-600 font-bold">「幫我開啟畫布撰寫...」</span></li>
+                            <li>方式二：在一般生成的回答下方，點選 <span class="text-blue-600 font-bold">「在 Canvas 中開啟」</span>。</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 3: 模組二：PARTS 公式 -->
+            <!-- Slide 3: 萬用 PARTS 公式 -->
             <div class="slide" id="slide-3">
                 <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-8 title-underline">🎯 模組二：萬用 PARTS 公式</h2>
+                    <h2 class="text-3xl font-bold mb-8 title-underline">🎯 進入實戰前：萬用 PARTS 公式</h2>
                     <p class="text-lg text-gray-700 mb-4">別讓 AI 猜你的心！指令請包含這五大要素：</p>
                     <div class="sketch-box bg-white p-6 space-y-4">
                         <div class="flex gap-4 items-center hover:bg-blue-50 p-2 rounded transition-colors">
@@ -286,230 +298,372 @@
                 </div>
             </div>
 
-            <!-- Slide 4: 實戰演練：PARTS 公式 -->
+            <!-- Slide 4: 課程地圖：Canvas 能做到的 4 種程度 -->
             <div class="slide" id="slide-4">
                 <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-6 title-underline text-blue-700">📝 實戰演練：交班紀錄轉家屬摘要</h2>
-                    <p class="text-lg text-gray-700 mb-4 font-bold">點擊右上方按鈕複製，直接貼到 Canvas 中試試看！</p>
-                    <div class="prompt-box bg-white p-6 border-2 border-dashed border-blue-300 rounded-lg relative shadow-sm text-left">
-                        <button onclick="copyPrompt(this)" class="absolute top-4 right-4 bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1.5 rounded shadow hover:bg-blue-100 transition-colors font-bold text-sm z-10 flex items-center gap-1">📋 一鍵複製</button>
-                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed pr-24">請扮演長照機構資深護理長 (P)。請將以下散亂的照服員交班紀錄，整理成一份給家屬看的每日照顧摘要 (A, R)。重點放在長輩今日的進食狀況與情緒變化 (T)。請用親切溫暖的語氣，並以條列式加上一個溫馨的小結語來呈現 (S)。
-
-【照服員交班紀錄】
-王爺爺今天中午只吃兩口飯，一直說假牙痛。下午職能治療課在玩丟沙包，結果他丟不準就生氣，把沙包丟到地上不玩了。後來護理師幫他看牙齦有點紅腫，有擦藥。晚餐他喝了半碗安素就去睡了。</div>
+                    <h2 class="text-3xl font-bold mb-6 title-underline">🗺️ 課程地圖：Canvas 的 4 種程度</h2>
+                    <p class="text-gray-700 mb-4 text-lg">今天我們將一層一層解鎖 Canvas 的潛力：</p>
+                    <div class="flex flex-col gap-4 mt-2">
+                        <div class="sketch-box bg-white p-3 border-l-8 border-gray-300 hover:scale-[1.02] transition-transform shadow-sm">
+                            <h3 class="font-bold text-lg text-gray-800">🌱 Lv 1. 基礎潤飾 (微調)</h3>
+                            <p class="text-gray-600 text-sm">改變長度、調整語氣(變專業/變親切)，適合每天的交班紀錄或 ISP。</p>
+                        </div>
+                        <div class="sketch-box bg-white p-3 border-l-8 border-green-400 hover:scale-[1.02] transition-transform shadow-sm">
+                            <h3 class="font-bold text-lg text-green-800">🌿 Lv 2. 重組排版 (整理)</h3>
+                            <p class="text-gray-600 text-sm">把雜亂的長文變成條列重點或表格，適合處理政府公文與會議紀錄。</p>
+                        </div>
+                        <div class="sketch-box bg-white p-3 border-l-8 border-blue-500 hover:scale-[1.02] transition-transform shadow-sm">
+                            <h3 class="font-bold text-lg text-blue-800">🌳 Lv 3. 跨語種/跨格式 (轉換)</h3>
+                            <p class="text-gray-600 text-sm">將中文 SOP 翻成印尼文/越南文，或將企劃文字直接變成簡報大綱。</p>
+                        </div>
+                        <div class="sketch-box bg-white p-3 border-l-8 border-purple-600 hover:scale-[1.02] transition-transform shadow-sm">
+                            <h3 class="font-bold text-lg text-purple-800">🌟 Lv 4. 網頁與系統產生器 (創造)</h3>
+                            <p class="text-gray-600 text-sm">用白話文直接做出長輩小測驗、互動遊戲。(免寫程式！)</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 5: 模組三：快捷工具箱 (加入實境模擬器) -->
+            <!-- Slide 5: Lv 1 基礎潤飾 - 工具介紹與 ISP 魔法 -->
             <div class="slide" id="slide-5">
                 <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-4 title-underline">🛠️ 模組三：畫布專屬「快捷工具箱」</h2>
+                    <h2 class="text-3xl font-bold mb-4 title-underline text-gray-800">🌱 Lv 1. 基礎潤飾：畫布專屬「快捷工具箱」</h2>
                     <div class="bg-yellow-100 border-l-4 border-yellow-500 p-2 mb-4 font-bold text-gray-800 text-sm">
                         ⚠️ 核心心法：請先用滑鼠「反白」要修改的文字，再點擊工具，AI 就不會亂動其他段落！
                     </div>
                     
-                    <!-- 彩蛋 2：實體工具模擬器 -->
-                    <div class="sketch-box bg-gray-50 p-5 mb-4 border-2 border-dashed border-blue-300 relative">
-                        <div class="absolute -top-3 -right-3 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold transform rotate-12 shadow">動手點點看!</div>
-                        <h3 class="text-sm text-gray-500 font-bold mb-2">👇 講師展示區：點擊按鈕，模擬 Canvas 工具列魔法</h3>
-                        <p id="demoText" class="text-lg font-bold text-gray-800 bg-white p-4 rounded shadow-inner min-h-[100px] flex items-center transition-all duration-300">
-                            阿公今天中午吃飯不太乖，菜都吐出來。下午玩拼圖一直拼錯就生氣了。
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-4 justify-center">
-                            <button onclick="updateDemoText('short')" class="interactive-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full">📏 縮短</button>
-                            <button onclick="updateDemoText('long')" class="interactive-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full">📏 擴充</button>
-                            <button onclick="updateDemoText('pro')" class="interactive-btn bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-2 px-4 rounded-full">🗣️ 專業口吻</button>
-                            <button onclick="updateDemoText('warm')" class="interactive-btn bg-pink-100 hover:bg-pink-200 text-pink-800 font-bold py-2 px-4 rounded-full">🗣️ 溫暖口吻</button>
-                            <button onclick="updateDemoText('reset')" class="interactive-btn bg-white border border-gray-300 hover:bg-gray-100 text-gray-600 font-bold py-2 px-4 rounded-full ml-auto">🔄 還原</button>
+                    <div class="flex flex-col md:flex-row gap-4 w-full">
+                        <!-- 左側：工具模擬器 -->
+                        <div class="sketch-box bg-gray-50 p-4 border-2 border-dashed border-blue-300 relative flex-1">
+                            <div class="absolute -top-3 -right-3 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-bold transform rotate-12 shadow">動手點點看!</div>
+                            <h3 class="text-sm text-gray-500 font-bold mb-2">👇 點擊按鈕，模擬 Canvas 工具列</h3>
+                            <p id="demoText" class="text-sm font-bold text-gray-800 bg-white p-3 rounded shadow-inner min-h-[80px] flex items-center transition-all duration-300">
+                                阿公今天中午吃飯不太乖，菜都吐出來。下午玩拼圖一直拼錯就生氣了。
+                            </p>
+                            <div class="flex flex-wrap gap-2 mt-3 justify-center text-xs">
+                                <button onclick="updateDemoText('short')" class="interactive-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-3 rounded-full">📏 縮短</button>
+                                <button onclick="updateDemoText('long')" class="interactive-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-3 rounded-full">📏 擴充</button>
+                                <button onclick="updateDemoText('pro')" class="interactive-btn bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-1 px-3 rounded-full">🗣️ 專業口吻</button>
+                                <button onclick="updateDemoText('warm')" class="interactive-btn bg-pink-100 hover:bg-pink-200 text-pink-800 font-bold py-1 px-3 rounded-full">🗣️ 溫暖口吻</button>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="grid grid-cols-2 gap-4 text-sm">
-                        <div class="sketch-box bg-white p-3">
-                            <div class="action-badge">右上角按鈕</div>
-                            <h3 class="font-bold mb-1">🔄 版本回溯 (History)</h3>
-                            <p class="text-gray-600 text-xs">點擊「時鐘圖示」隨時復原到滿意的版本。</p>
-                        </div>
-                        <div class="sketch-box bg-white p-3">
-                            <div class="action-badge">右上角按鈕</div>
-                            <h3 class="font-bold mb-1">📤 一鍵匯出 (Export)</h3>
-                            <p class="text-gray-600 text-xs">點擊「分享圖示」直接匯出至 Google Docs。</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 6: 模組四：長照實戰情境 (加入優化特效) -->
-            <div class="slide" id="slide-6">
-                <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-8 title-underline">👩‍⚕️ 模組四：長照實戰場景</h2>
-                    <div class="space-y-6">
-                        
-                        <div class="sketch-box bg-pink-50 p-6 border-pink-200 relative group overflow-hidden">
-                            <h3 class="font-bold text-2xl text-pink-700 mb-3 flex items-center">
-                                <span class="mr-2">📝</span> 臨床組：ISP 與個案紀錄優化
-                            </h3>
-                            
-                            <!-- 彩蛋 3：一鍵優化特效區 -->
-                            <div class="bg-white p-4 border border-pink-300 rounded relative min-h-[120px]">
-                                <div id="badIsp" class="text-gray-600 text-lg transition-all duration-500">
-                                    [隨手筆記] 阿公今天一直說要找老伴，中午吃飯吐掉一口青菜，下午參加拼圖活動一直把邊邊拼錯，然後突然生氣。
+                        <!-- 右側：ISP 魔法 -->
+                        <div class="sketch-box bg-pink-50 p-4 border-pink-200 relative group overflow-hidden flex-1">
+                            <h3 class="font-bold text-lg text-pink-700 mb-2">臨床筆記轉專業 ISP</h3>
+                            <div class="bg-white p-3 border border-pink-300 rounded relative min-h-[100px]">
+                                <div id="badIsp" class="text-gray-600 text-sm transition-all duration-500">
+                                    [隨手筆記] 阿公今天一直說要找老伴，中午吃飯吐掉一口青菜，下午拼圖一直拼錯突然生氣。
                                 </div>
                                 <div id="goodIsp" class="hidden mt-2">
                                     <span class="text-xs font-bold text-pink-500 border border-pink-500 rounded px-1 mb-1 inline-block">轉換為專業術語...</span>
-                                    <div class="text-pink-800 font-bold text-lg typewriter leading-relaxed">
-                                        個案今日出現疑似尋人行為（尋找配偶）。午餐進食量略減，有吐食狀況。下午參與認知拼圖活動時，空間建構能力表現受挫，伴隨突發性情緒躁動，需持續觀察認知與情緒起伏。
+                                    <div class="text-pink-800 font-bold text-sm typewriter leading-relaxed">
+                                        個案今日出現疑似尋找配偶行為。午餐有吐食狀況。下午參與認知拼圖活動時空間建構表現受挫，伴隨突發性情緒躁動，需持續觀察。
                                     </div>
                                 </div>
-                                <button id="magicBtn" onclick="runMagicIsp()" class="interactive-btn absolute right-3 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-pink-500 to-red-500 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:scale-105 z-10">
-                                    ✨ 點我施展魔法
+                                <button id="magicBtn" onclick="runMagicIsp()" class="interactive-btn absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-pink-500 to-red-500 text-white font-bold py-1 px-2 text-xs rounded-full shadow hover:scale-105 z-10">
+                                    ✨ 施展魔法
                                 </button>
                             </div>
                         </div>
-
-                        <div class="sketch-box bg-blue-50 p-6 border-blue-200">
-                            <h3 class="font-bold text-2xl text-blue-700 mb-3 flex items-center">
-                                <span class="mr-2">📂</span> 行政組：評鑑資料與政策公告
-                            </h3>
-                            <p class="text-lg text-gray-700 leading-relaxed mb-2">
-                                貼入政府厚重的政策公文草稿。
-                            </p>
-                            <div class="bg-white p-3 border border-blue-300 rounded text-blue-900 font-bold shadow-inner">
-                                👉 指令：「從這份公文中提煉 PDCA 執行計畫表，並另成一篇給家屬閱讀的白話文懶人包。」
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 7: 實戰演練：公文處理 -->
+            <!-- Slide 6: Lv 1 實戰演練：交班紀錄 -->
+            <div class="slide" id="slide-6">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-6 title-underline text-gray-800">🌱 Lv 1. 實戰演練：交班紀錄轉家屬摘要</h2>
+                    <p class="text-lg text-gray-700 mb-4 font-bold">點擊右上方按鈕複製，直接貼到 Canvas 中試試看！</p>
+                    <div class="prompt-box bg-white p-6 border-2 border-dashed border-gray-400 rounded-lg relative shadow-sm text-left">
+                        <button onclick="copyPrompt(this)" class="absolute top-4 right-4 bg-gray-100 text-gray-700 border border-gray-300 px-3 py-1.5 rounded shadow hover:bg-gray-200 transition-colors font-bold text-sm z-10 flex items-center gap-1">📋 一鍵複製</button>
+                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed pr-24">護理長(P)：請將交班紀錄寫成給家屬的摘要(A,R)，重點放進食與情緒(T)，用親切語氣並條列式(S)。
+
+【紀錄】
+王爺爺中午牙痛只吃兩口。下午玩沙包丟不準生氣不玩。護理師有擦藥。晚餐喝半碗安素就睡了。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Lv 2 重組排版 - 處理公文與雜亂資料 -->
             <div class="slide" id="slide-7">
                 <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-6 title-underline text-blue-700">📝 實戰演練：衛福部公文重點提煉</h2>
-                    <p class="text-lg text-gray-700 mb-4 font-bold">複製下方公文範本，體驗 AI 強大的摘要與重寫能力：</p>
-                    <div class="prompt-box bg-white p-6 border-2 border-dashed border-blue-300 rounded-lg relative shadow-sm text-left h-[450px] overflow-y-auto">
-                        <button onclick="copyPrompt(this)" class="sticky top-0 float-right bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1.5 rounded shadow hover:bg-blue-100 transition-colors font-bold text-sm z-10 flex items-center gap-1 ml-4 mb-2">📋 一鍵複製</button>
-                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed text-sm">請幫我閱讀以下這份衛福部的長照新制公文草案。請幫我：
-1. 整理出與我們「24H 住宿型長照機構」最相關的 3 個重點變化。
-2. 列出我們需要對應修改的 SOP 項目。
-3. 另外寫一段 50 字的白話文公告，讓我可以直接發在照服員的 Line 佈達群組。
-
-【公文內容】
-主旨：為強化住宿式長照機構感染管制，自即日起實施「住宿式長照機構感染管制查核指標(修正草案)」。
-說明：
-一、考量近期呼吸道傳染病群聚事件頻傳，要求各機構每班至少安排一名具備「初階感染管制訓練合格」之照服員值勤。
-二、針對訪客管理，應落實發燒篩檢及實名登記，若遇機構內發生上呼吸道群聚感染，應暫停家屬探視，改以視訊會客。
-三、機構應每週定期針對交誼廳、復健區等高頻率接觸表面進行含氯漂白水消毒，並做成紀錄備查。</div>
+                    <h2 class="text-3xl font-bold mb-6 title-underline text-green-800">🌿 Lv 2. 重組排版：拯救行政人員的長文地獄</h2>
+                    <div class="sketch-box bg-green-50 p-6 border-green-200 mb-6">
+                        <h3 class="font-bold text-2xl text-green-700 mb-3 flex items-center">
+                            <span class="mr-2">📂</span> 評鑑資料、政策公告與會議紀錄
+                        </h3>
+                        <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                            當你收到政府厚重的政策公文，或是長達 30 頁的評鑑基準草案，最適合使用 Canvas 進行重點提取。
+                        </p>
+                        <div class="bg-white p-4 border border-green-300 rounded text-green-900 font-bold shadow-inner">
+                            👉 常見指令：「請將這份公文重組成 PDCA 執行計畫表」或「整理出與我們機構最相關的 3 大重點，並生成一篇 Line 群組白話公告。」
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-4 text-sm">
+                        <div class="sketch-box bg-white p-3">
+                            <div class="action-badge bg-green-700">重點</div>
+                            <h3 class="font-bold mb-1">避免 AI 漏看資訊</h3>
+                            <p class="text-gray-600 text-xs">長文貼入 Canvas，它能像完整文件一樣被處理，不易遺漏關鍵細節。</p>
+                        </div>
+                        <div class="sketch-box bg-white p-3">
+                            <div class="action-badge bg-green-700">右上角按鈕</div>
+                            <h3 class="font-bold mb-1">📤 一鍵匯出 (Export)</h3>
+                            <p class="text-gray-600 text-xs">排版好的表格，點擊「分享圖示」可直接匯出至 Google Docs 繼續編輯。</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 8: 進階魔法 (加入 Vibe Coding 體驗) -->
+            <!-- Slide 8: Lv 2 實戰演練：公文處理 -->
             <div class="slide" id="slide-8">
                 <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-6 title-underline">🪄 模組五：進階魔法 (產出簡報與網頁)</h2>
-                    <div class="flex flex-col space-y-4">
-                        <div class="sketch-box p-5 bg-white border-yellow-200 shadow-sm">
-                            <h3 class="text-2xl font-bold text-yellow-700 mb-2 flex items-center">📽️ 數分鐘產出精美簡報 (Slides)</h3>
-                            <div class="bg-gray-100 p-2 text-sm rounded border-l-4 border-yellow-500">
-                                <span class="action-badge bg-yellow-600">實作步驟</span> 上傳企劃案 ➡️ 輸入指令：「<span class="font-bold text-yellow-700">請從此檔案建立一份摘要簡報</span>」 ➡️ 生成投影片 ➡️ 點擊右下角「匯出至 Google 簡報」。
+                    <h2 class="text-3xl font-bold mb-6 title-underline text-green-800">🌿 Lv 2. 實戰演練：衛福部公文重點提煉</h2>
+                    <p class="text-lg text-gray-700 mb-4 font-bold">複製下方公文範本，體驗 AI 強大的重點整理與排版能力：</p>
+                    <div class="prompt-box bg-white p-6 border-2 border-dashed border-green-400 rounded-lg relative shadow-sm text-left h-[400px] overflow-y-auto">
+                        <button onclick="copyPrompt(this)" class="sticky top-0 float-right bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded shadow hover:bg-green-100 transition-colors font-bold text-sm z-10 flex items-center gap-1 ml-4 mb-2">📋 一鍵複製</button>
+                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed text-sm">請閱讀以下長照公文，幫我：
+1. 整理 3 個最相關的重點。
+2. 列出需修改的 SOP。
+3. 寫 50 字白話公告給照服員 Line 群。
+
+【公文】
+主旨：實施住宿式長照感染管制查核。
+說明：
+一、每班需有一名「初階感管合格」照服員。
+二、落實發燒篩檢，群聚感染時改視訊會客。
+三、交誼廳等高頻率接觸表面每週漂白水消毒。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: Lv 3 跨語種/跨格式 - Create 大絕招 -->
+            <div class="slide" id="slide-9">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-6 title-underline text-blue-800">🌳 Lv 3. 跨格式轉換：右上角「Create」</h2>
+                    <p class="text-lg text-gray-700 mb-4 tracking-wide">注意 Canvas 右上角的「Create (建立)」按鈕，裡面藏著長照機構必學的殺手鐧：</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-4 mt-4">
+                        <div class="sketch-box p-4 bg-white border-blue-200 shadow-sm relative">
+                            <h3 class="text-lg font-bold text-blue-700 mb-1 flex items-center">
+                                <span>📊 資訊圖表 (Infographics)</span>
+                            </h3>
+                            <p class="text-gray-600 text-sm">血壓數據或排班表，瞬間變成精美表格與圖表！</p>
+                        </div>
+                        
+                        <div class="sketch-box p-4 bg-white border-blue-200 shadow-sm relative">
+                            <h3 class="text-lg font-bold text-blue-700 mb-1 flex items-center">
+                                <span>📇 學習卡與測驗 (Quizzes)</span>
+                            </h3>
+                            <p class="text-gray-600 text-sm">硬梆梆的法規與 SOP，一鍵變成新進員工的雙面字卡或隨堂考。</p>
+                        </div>
+                        
+                        <div class="sketch-box p-4 bg-white border-blue-200 shadow-sm relative">
+                            <h3 class="text-lg font-bold text-blue-700 mb-1 flex items-center">
+                                <span>📽️ 簡報大綱 (Slides)</span>
+                            </h3>
+                            <p class="text-gray-600 text-sm">把冗長的企劃案，自動整理成分頁投影片架構。</p>
+                        </div>
+
+                        <div class="sketch-box p-4 bg-white border-blue-200 shadow-sm relative">
+                            <h3 class="text-lg font-bold text-blue-700 mb-1 flex items-center">
+                                <span>🌐 跨國溝通 (Translation)</span>
+                            </h3>
+                            <p class="text-gray-600 text-sm">反白文字，立刻精準翻譯成印尼/越南文對照表。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 10: Lv 3 實戰演練 1：資訊圖表 -->
+            <div class="slide" id="slide-10">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-6 title-underline text-blue-800">📊 實戰 1：血壓數據轉資訊圖表</h2>
+                    <div class="prompt-box bg-blue-50 p-6 border-2 border-dashed border-blue-300 rounded-lg relative shadow-sm text-left">
+                        <button onclick="copyPrompt(this)" class="absolute top-4 right-4 bg-blue-100 text-blue-800 border border-blue-300 px-3 py-1.5 rounded shadow hover:bg-blue-200 transition-colors font-bold text-sm z-10 flex items-center gap-1">📋 一鍵複製</button>
+                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed pr-24 text-sm">請幫我將以下長輩的雜亂血壓紀錄，整理成美觀、易讀的「表格」，並在下方用一段白話文給出趨勢摘要。
+
+【數據紀錄】
+王爺爺：週一早140/90，晚135/85。週二早145/92，晚138/88。週三早150/95，晚142/90。週四早135/85，晚130/80。週五早138/88，晚135/85。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 11: Lv 3 實戰演練 2：學習卡與測驗 -->
+            <div class="slide" id="slide-11">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-6 title-underline text-blue-800">📇 實戰 2：感控規範轉學習卡</h2>
+                    <div class="prompt-box bg-blue-50 p-6 border-2 border-dashed border-blue-300 rounded-lg relative shadow-sm text-left">
+                        <button onclick="copyPrompt(this)" class="absolute top-4 right-4 bg-blue-100 text-blue-800 border border-blue-300 px-3 py-1.5 rounded shadow hover:bg-blue-200 transition-colors font-bold text-sm z-10 flex items-center gap-1">📋 一鍵複製</button>
+                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed pr-24 text-sm">請根據以下的感控規範，為新進照服員製作 3 題「選擇題隨堂考」，以及 3 張重點「雙面字卡(Flashcards)」（正面問題，反面答案）。
+
+【洗手規範】
+洗手時機：接觸住民前、執行無菌技術前、接觸住民後、接觸住民周圍環境後、暴露體液風險後。洗手步驟必須落實「內外夾弓大立腕」，並搓揉至少 20 秒。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 12: Lv 3 實戰演練 3：企劃轉簡報 -->
+            <div class="slide" id="slide-12">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-6 title-underline text-blue-800">📽️ 實戰 3：企劃案轉早會簡報</h2>
+                    <div class="prompt-box bg-blue-50 p-6 border-2 border-dashed border-blue-300 rounded-lg relative shadow-sm text-left">
+                        <button onclick="copyPrompt(this)" class="absolute top-4 right-4 bg-blue-100 text-blue-800 border border-blue-300 px-3 py-1.5 rounded shadow hover:bg-blue-200 transition-colors font-bold text-sm z-10 flex items-center gap-1">📋 一鍵複製</button>
+                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed pr-24 text-sm">請將以下企劃，建立適合早會報告的摘要簡報。含：封面、主旨、時間地點、分工表、突發應變。
+
+【企劃】
+中秋卡拉OK大賽，9/15 14:00-16:00 大交誼廳。
+流程：院長致詞、長輩卡拉OK、發無糖月餅。
+分工：
+護理-評估名單與急救箱；照服-推輪椅防嗆食；社工-主持與家屬視訊。
+應變：情緒激動推至安靜區；噎食通報執行哈姆立克。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 13: Lv 4 製作網頁 (創造) -->
+            <div class="slide" id="slide-13">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-6 title-underline text-purple-800">🌟 Lv 4. 創造：實用網頁小工具</h2>
+                    <p class="text-lg text-gray-700 mb-4 tracking-wide">用語音或白話文，就能讓 AI 幫你寫出長照機構專屬的系統與網頁！</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-6 mt-4">
+                        <div class="sketch-box p-5 bg-white border-purple-300 shadow-md relative overflow-hidden flex flex-col justify-between">
+                            <div class="absolute -right-6 -top-6 bg-purple-500 text-white w-20 h-20 rounded-full flex items-end justify-center pb-2 font-bold text-sm transform rotate-45">互動!</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-purple-700 mb-2 flex items-center">📝 員工隨堂測驗</h3>
+                                <p class="text-gray-700 mb-4 text-sm">丟入感控手冊，生成員工隨堂考網頁。還能直接作答對答案！</p>
+                            </div>
+                            <button onclick="openQuiz()" class="interactive-btn bg-purple-100 border border-purple-300 hover:bg-purple-200 text-purple-800 font-bold py-2 px-4 rounded shadow w-full">
+                                👉 體驗：Canvas 認知測驗
+                            </button>
+                        </div>
+                        
+                        <div class="sketch-box p-4 bg-purple-50 border-purple-400 shadow-md relative flex gap-3 items-center">
+                            <div class="flex-1 flex flex-col justify-between h-full">
+                                <div>
+                                    <h3 class="text-xl font-bold text-purple-700 mb-1">🕹️ 互動網頁遊戲</h3>
+                                    <p class="text-gray-700 mb-3 text-xs font-bold leading-relaxed">指令：「做一個長輩畫圖猜謎網頁，按鈕要大。」</p>
+                                </div>
+                                <button onclick="openGame()" class="interactive-btn bg-purple-600 hover:bg-purple-700 text-white font-bold py-1.5 px-3 rounded shadow w-full text-sm">
+                                    點擊試玩！
+                                </button>
+                            </div>
+                            <div class="flex flex-col items-center bg-white p-2 border-2 border-dashed border-gray-400 rounded">
+                                <p class="text-[10px] font-bold text-purple-600 mb-1">手機掃描試玩👇</p>
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://quickdraw.withgoogle.com/" alt="QR Code" class="w-16 h-16">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 14: 基礎求生技能：記事本存網頁 -->
+            <div class="slide" id="slide-14">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-4 title-underline text-orange-800">🛠️ 基礎求生：怎麼打開 AI 寫的網頁？</h2>
+                    <p class="text-lg text-gray-700 mb-4 tracking-wide">AI 幫你寫出程式碼後，不需要安裝任何軟體，用 Windows 內建「記事本」就能測試：</p>
+                    
+                    <div class="flex flex-col md:flex-row gap-4 w-full">
+                        <div class="sketch-box bg-white p-5 flex-1 border-orange-300 shadow-sm relative">
+                            <h3 class="font-bold text-xl text-orange-700 mb-3 text-center border-b pb-2">操作 3 步驟</h3>
+                            <ul class="space-y-3 text-gray-700 font-bold">
+                                <li><span class="bg-orange-100 px-2 py-1 rounded border border-orange-300">1</span> 打開記事本，把 AI 給的 HTML 碼貼上。</li>
+                                <li><span class="bg-orange-100 px-2 py-1 rounded border border-orange-300">2</span> 左上角點擊「檔案」 ➔ 「另存新檔」。</li>
+                                <li><span class="bg-orange-100 px-2 py-1 rounded border border-orange-300">3</span> 檔名輸入 <span class="text-blue-600">"index.html"</span>，按下存檔。</li>
+                            </ul>
+                            <div class="mt-4 text-center">
+                                👉 <span class="text-sm font-normal text-gray-500">最後對著檔案「雙擊滑鼠」就可以用瀏覽器打開囉！</span>
                             </div>
                         </div>
                         
-                        <div class="sketch-box p-5 bg-purple-50 border-purple-300 shadow-md relative">
-                            <div class="absolute -right-4 -top-4 text-4xl transform rotate-12 animate-pulse">🎮</div>
-                            <h3 class="text-2xl font-bold text-purple-700 mb-2 flex items-center">💻 Vibe Coding：免寫程式產出互動遊戲</h3>
-                            <p class="text-gray-700 mb-3 font-bold">指令：「幫我做一個長輩猜成語的網頁遊戲」</p>
-                            
-                            <!-- 彩蛋 4：Vibe Coding 實體遊戲按鈕 -->
-                            <button onclick="openGame()" class="interactive-btn bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full shadow-lg w-full text-lg flex justify-center items-center gap-2">
-                                🕹️ 點擊預覽：試玩 AI 生成的成語遊戲！
-                            </button>
+                        <div class="sketch-box bg-red-50 p-5 flex-1 border-red-300 shadow-sm relative transform rotate-1">
+                            <div class="absolute -top-3 -right-3 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold transform rotate-12">防呆關鍵!</div>
+                            <h3 class="font-bold text-xl text-red-700 mb-3 text-center border-b border-red-200 pb-2">存檔時請注意！</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="font-bold text-md text-red-800">❗ 存檔類型：</h4>
+                                    <p class="text-sm text-gray-700 bg-white p-2 rounded border border-red-200 mt-1">
+                                        一定要下拉改成 <span class="font-bold text-red-600">「所有檔案 (*.*)」</span>。<br>
+                                        (不然會變成 .html.txt，網頁會打不開！)
+                                    </p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-md text-red-800">❗ 編碼格式：</h4>
+                                    <p class="text-sm text-gray-700 bg-white p-2 rounded border border-red-200 mt-1">
+                                        確認右下角編碼是 <span class="font-bold text-red-600">「UTF-8」</span>。<br>
+                                        (不然網頁上的中文字會變成亂碼！)
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 9: 實戰演練：企劃轉簡報 -->
-            <div class="slide" id="slide-9">
+            <!-- Slide 15: Netlify Drop 部署教學 -->
+            <div class="slide" id="slide-15">
                 <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-6 title-underline text-yellow-700">📝 實戰演練：企劃案轉早會簡報</h2>
-                    <div class="prompt-box bg-yellow-50 p-6 border-2 border-dashed border-yellow-400 rounded-lg relative shadow-sm text-left">
-                        <button onclick="copyPrompt(this)" class="absolute top-4 right-4 bg-yellow-100 text-yellow-800 border border-yellow-300 px-3 py-1.5 rounded shadow hover:bg-yellow-200 transition-colors font-bold text-sm z-10 flex items-center gap-1">📋 一鍵複製</button>
-                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed pr-24 text-sm">請閱讀以下的『中秋節長輩聯歡晚會企劃草案』。請幫我從這份企劃案中，建立一份適合在機構早會向所有同仁報告的摘要簡報。需包含：封面、活動主旨、時間地點、各組人力分工表、以及當天突發狀況的應變機制。
-
-【企劃草案】
-活動名稱：月圓人團圓-中秋卡拉OK大賽
-時間：9/15 下午 2:00-4:00  |  地點：一樓大交誼廳
-活動流程：2:00院長致詞，2:10長輩卡拉OK，3:30發放無糖月餅與柚子，4:00協助推輪椅回房。
-人力分工：
-- 護理組：負責評估可下床參與的長輩名單，準備急救箱。
-- 照服組：負責推送輪椅，活動中注意長輩是否有嗆食風險。
-- 社工組：主持節目，引導氣氛，協助家屬視訊連線。
-突發應變：若有長輩情緒激動，由照服員先推至旁邊安靜區安撫；若發生噎食，立刻通報值班護理師執行哈姆立克。</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 10: 隱藏大絕招 (互動測驗) -->
-            <div class="slide" id="slide-10">
-                <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-3 title-underline">🌟 模組六：Canvas 右上角「Create」大絕招</h2>
-                    <p class="text-lg text-gray-700 mb-4 tracking-wide">注意 Canvas 右上角的「Create (建立)」按鈕，裡面藏著長照機構必學的殺手鐧：</p>
-                    <div class="flex flex-col space-y-4">
-                        <div class="sketch-box p-4 bg-white border-green-200 shadow-sm">
-                            <h3 class="text-xl font-bold text-green-700 mb-1 flex justify-between">
-                                <span>📊 數據一鍵變儀表板 (Infographic)</span>
-                                <span class="action-badge bg-green-600 text-xs">Create ➡️ 圖表</span>
-                            </h3>
-                            <p class="text-gray-600">貼上長輩血壓數據或排班表，行政報告瞬間升級成精美圓餅圖/折線圖！</p>
+                    <h2 class="text-3xl font-bold mb-4 title-underline text-green-800">🚀 一秒上線：Netlify Drop 拖曳大法</h2>
+                    <p class="text-lg text-gray-700 mb-6 tracking-wide text-center">最適合初學者的神器！免學程式碼，拖拉放一秒獲得專屬網址！</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 w-full gap-4 max-w-5xl mx-auto">
+                        <div class="sketch-box bg-white p-4 border-2 border-green-300 shadow-sm relative text-center">
+                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-green-500 text-white w-8 h-8 rounded-full flex justify-center items-center font-bold text-lg">1</div>
+                            <h3 class="font-bold text-lg text-green-800 mt-2 mb-2 border-b pb-2">打開部署網站</h3>
+                            <p class="text-sm text-gray-700 leading-relaxed">在瀏覽器網址列輸入：<br><span class="font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded inline-block mt-2">app.netlify.com/drop</span></p>
+                            <p class="text-xs text-red-500 mt-2 font-bold">(注意：一開始不需要登入喔！)</p>
                         </div>
                         
-                        <!-- 互動測驗卡片 -->
-                        <div class="sketch-box p-4 bg-pink-50 border-pink-300 shadow-md relative overflow-hidden">
-                            <div class="absolute -right-6 -top-6 bg-pink-500 text-white w-20 h-20 rounded-full flex items-end justify-center pb-2 font-bold text-sm transform rotate-45">互動!</div>
-                            <h3 class="text-xl font-bold text-pink-700 mb-1 flex justify-between items-center">
-                                <span>📝 互動式教育測驗 (Quiz)</span>
-                            </h3>
-                            <p class="text-gray-700 mb-3">丟入感控手冊，點擊 Create 生成員工隨堂考。右側能直接作答對答案！</p>
-                            <button onclick="openQuiz()" class="interactive-btn bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded shadow w-full">
-                                👉 點擊這裡，講師帶你立刻體驗！
-                            </button>
+                        <div class="sketch-box bg-white p-4 border-2 border-green-300 shadow-sm relative text-center">
+                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-green-500 text-white w-8 h-8 rounded-full flex justify-center items-center font-bold text-lg">2</div>
+                            <h3 class="font-bold text-lg text-green-800 mt-2 mb-2 border-b pb-2">滑鼠拖曳資料夾</h3>
+                            <p class="text-sm text-gray-700 leading-relaxed">把你剛才裝著 `index.html` 的資料夾，直接拖進網頁中間的<br><span class="font-bold">「虛線大框框」</span>內。</p>
                         </div>
 
-                        <div class="sketch-box p-4 bg-white border-blue-200 shadow-sm">
-                            <h3 class="text-xl font-bold text-blue-700 mb-1 flex justify-between">
-                                <span>🌐 跨國照服員溝通神器 (反白技巧)</span>
-                                <span class="action-badge bg-blue-600 text-xs">反白 ➡️ 翻譯</span>
-                            </h3>
-                            <p class="text-gray-600">反白中文 SOP ➡️ 指令：「<span class="font-bold text-blue-700">精準翻譯成印、越文對照表格</span>」，零障礙培訓同仁。</p>
+                        <div class="sketch-box bg-green-50 p-4 border-2 border-green-400 shadow-md relative scale-105 text-center flex flex-col justify-between">
+                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-green-600 text-white w-8 h-8 rounded-full flex justify-center items-center font-bold text-lg shadow">3</div>
+                            <div>
+                                <h3 class="font-bold text-lg text-green-800 mt-2 mb-2 border-b pb-1">拿網址與分享</h3>
+                                <p class="text-sm text-gray-700 leading-relaxed mb-2 font-bold">恭喜拿到專屬網址！</p>
+                                <p class="text-xs bg-yellow-100 p-2 border border-yellow-300 rounded font-bold text-left mb-2 leading-relaxed">
+                                    💡 <span class="text-red-600">神技提醒</span>：拿到網址後按<span class="text-blue-600">滑鼠右鍵</span> ➔ 選擇<span class="text-blue-600">「為這個網頁建立 QR 圖碼」</span>。就像剛才大家掃的遊戲一樣，印出來就能給長輩玩囉！
+                                </p>
+                            </div>
+                            <p class="text-[10px] text-gray-500 font-bold bg-white p-1 rounded border">(未登入網址 1 小時後失效，點上方 Sign Up 可永久保存)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 16: 科普小知識：靜態 vs 動態網頁 -->
+            <div class="slide" id="slide-16">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-6 title-underline text-center w-full block">💡 科普小知識：靜態 vs 動態網頁</h2>
+                    <p class="text-lg text-gray-700 mb-6 text-center">為什麼我們剛才丟上去 Netlify 的網頁，馬上就能動？</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-6 max-w-4xl mx-auto">
+                        <div class="sketch-box bg-green-50 p-6 border-2 border-green-300 relative">
+                            <h3 class="font-bold text-xl text-green-800 mb-3 flex items-center">📄 靜態網頁 (我們今天做的)</h3>
+                            <p class="text-gray-700 mb-3 text-sm leading-relaxed font-bold">就像一個「自帶電池的小玩具」。</p>
+                            <p class="text-gray-600 text-sm">外觀、文字、遊戲邏輯全部打包在同一個檔案裡。不需要複雜的後台支援，打開直接跑！</p>
+                            <div class="bg-green-100 p-2 mt-3 rounded text-center text-xs font-bold text-green-900">範例：宣傳單、衛教圖卡、簡單小遊戲、計算機</div>
+                        </div>
+                        
+                        <div class="sketch-box bg-purple-50 p-6 border-2 border-purple-300 relative">
+                            <h3 class="font-bold text-xl text-purple-800 mb-3 flex items-center">⚙️ 動態網頁 (工程師做的)</h3>
+                            <p class="text-gray-700 mb-3 text-sm leading-relaxed font-bold">就像「去餐廳吃飯 (前端 + 後端 + 資料庫)」。</p>
+                            <p class="text-gray-600 text-sm">你看到的是餐廳裝潢(前端)，點餐後需要廚房(後端)煮菜，食材存在冷藏庫(資料庫)。必須連接伺服器才能運作。</p>
+                            <div class="bg-purple-100 p-2 mt-3 rounded text-center text-xs font-bold text-purple-900">範例：照服員排班系統、個案管理系統、購物網</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 11: 實戰演練：外籍照服員溝通 SOP -->
-            <div class="slide" id="slide-11">
+            <!-- Slide 17: 資安紅線 -->
+            <div class="slide" id="slide-17">
                 <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-6 title-underline text-pink-700">📝 實戰演練：多國語言防跌指引</h2>
-                    <div class="prompt-box bg-pink-50 p-6 border-2 border-dashed border-pink-300 rounded-lg relative shadow-sm text-left">
-                        <button onclick="copyPrompt(this)" class="absolute top-4 right-4 bg-pink-100 text-pink-800 border border-pink-300 px-3 py-1.5 rounded shadow hover:bg-pink-200 transition-colors font-bold text-sm z-10 flex items-center gap-1">📋 一鍵複製</button>
-                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed pr-24">請將以下我們機構的『洗澡安全 SOP 與防跌指引』，精準翻譯成『印尼文』與『越南文』。請使用三欄對照表格呈現（繁體中文、印尼文、越南文），並確保使用的詞彙是外籍照服員容易理解的日常用語。
-
-【洗澡安全 SOP】
-1. 洗澡前：先測試水溫，並確認浴室地板沒有積水，鋪好防滑墊。
-2. 轉移位：從輪椅移位到洗澡椅時，一定要確實鎖上輪椅煞車，並喊「一、二、三」再動作。
-3. 洗澡中：絕對不可以把長輩一個人留在浴室，如果需要拿毛巾，請按鈴請同事幫忙。
-4. 洗澡後：馬上幫長輩穿上衣服避免著涼，並擦乾腳底板再穿上防滑拖鞋。</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 12: 模組七：資安紅線 -->
-            <div class="slide" id="slide-12">
-                <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-8 title-underline text-center w-full block">🛡️ 模組七：資安紅線與 AI 素養</h2>
+                    <h2 class="text-3xl font-bold mb-8 title-underline text-center w-full block">🛡️ 資安紅線與 AI 素養</h2>
                     
                     <div class="sketch-box border-red-500 bg-red-50 p-8 text-center mb-8 transform -rotate-1 mx-auto max-w-2xl hover:rotate-0 transition-transform">
                         <h3 class="text-3xl font-bold text-red-600 mb-4 flex justify-center items-center">
@@ -519,7 +673,7 @@
                         <p class="text-gray-500 mt-2">請守護長輩的隱私安全。</p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-6 max-w-3xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl mx-auto">
                         <div class="sticky-note -rotate-2 hover:rotate-0 transition-transform">
                             <div class="sticky-tape"></div>
                             <h4 class="font-bold text-xl mb-2 text-center underline text-blue-800">✅ 去識別化技巧</h4>
@@ -534,51 +688,77 @@
                 </div>
             </div>
 
-            <!-- Slide 13: 結語與進階探索 (左右排版縮小版面解決破圖) -->
-            <div class="slide" id="slide-13">
+            <!-- Slide 18: 課後作業 -->
+            <div class="slide" id="slide-18">
                 <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-4 title-underline text-center w-full block">🚀 讓演算法帶領你：探索 AI 的無限世界</h2>
-                    <p class="text-lg text-gray-700 mb-5 tracking-wide text-center">Canvas 只是起點！點擊下方影片，讓智慧的演算法為您開啟更多強大、有趣的 AI 玩法：</p>
+                    <h2 class="text-3xl font-bold mb-6 title-underline text-center w-full block">💪 課後實戰作業 (跨格式挑戰)</h2>
+                    <div class="sketch-box bg-yellow-50 border-2 border-yellow-400 p-8 mx-auto max-w-4xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-yellow-800 mb-4 text-center">🛠️ 任務：將文字「轉生」為實用工具</h3>
+                        <p class="text-lg text-gray-700 mb-4 leading-relaxed text-center">
+                            請找出一份工作上常用的文字資料（如 SOP、公文、企劃案、衛教單），貼進 Canvas 中，並使用「Create」或其他功能，<span class="font-bold text-red-600">完成以下四選一的任務</span>：
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-4 mb-6">
+                            <div class="bg-white p-3 border rounded text-center shadow-sm">
+                                <h4 class="font-bold text-blue-700 text-lg mb-1">1. 🌐 製作網頁/小工具</h4>
+                                <p class="text-sm text-gray-600">製作一個小遊戲或計算機，並用 Netlify 取得專屬網址。</p>
+                            </div>
+                            <div class="bg-white p-3 border rounded text-center shadow-sm">
+                                <h4 class="font-bold text-green-700 text-lg mb-1">2. 📊 資訊圖表</h4>
+                                <p class="text-sm text-gray-600">將枯燥的健康數據或排班表，變成一目瞭然的表格與摘要。</p>
+                            </div>
+                            <div class="bg-white p-3 border rounded text-center shadow-sm">
+                                <h4 class="font-bold text-purple-700 text-lg mb-1">3. 📇 學習卡與測驗</h4>
+                                <p class="text-sm text-gray-600">將規範手冊轉換成教育訓練專用的互動測驗或雙面字卡。</p>
+                            </div>
+                            <div class="bg-white p-3 border rounded text-center shadow-sm">
+                                <h4 class="font-bold text-orange-700 text-lg mb-1">4. 📽️ 簡報大綱</h4>
+                                <p class="text-sm text-gray-600">將落落長的企劃案，提煉成可直接上台報告的分頁簡報。</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-4 border-l-4 border-yellow-500 rounded text-center">
+                            <p class="text-gray-800 font-bold">✅ 繳交方式：</p>
+                            <p class="text-gray-600 text-sm mt-1 leading-relaxed">
+                                完成後，請將畫面截圖，或是繳交您的 Netlify 網址 / QR Code。<br>
+                                <span class="text-red-600 font-bold bg-yellow-100 px-1 rounded">⚠️ 繳交指定：請依課程規定，將作業上傳至指定的繳交路徑。</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 19: 結語與進階探索 -->
+            <div class="slide" id="slide-19">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-4 title-underline text-center w-full block">🚀 讓演算法帶領你：探索 AI 無限世界</h2>
+                    <p class="text-lg text-gray-700 mb-5 tracking-wide text-center">Canvas 只是起點！點擊影片探索更多 AI 玩法：</p>
                     
                     <div class="flex flex-col md:flex-row gap-6 max-w-5xl mx-auto">
-                        <!-- 左側：工具介紹 -->
                         <div class="flex-1 flex flex-col justify-center space-y-4">
                             <div class="sketch-box bg-blue-50 border-blue-300 p-4 hover:-translate-y-1 transition-transform">
                                 <h3 class="text-lg font-bold text-blue-800 mb-1 flex items-center">
                                     <span class="mr-2 text-2xl">🛠️</span> 
-                                    <div>
-                                        Google AI Studio<br>
-                                        <span class="text-xs font-normal text-gray-500">開發者級別的微調基地</span>
-                                    </div>
+                                    <div>Google AI Studio<br><span class="text-xs font-normal text-gray-500">開發者級別的微調基地</span></div>
                                 </h3>
-                                <p class="text-gray-700 text-sm leading-relaxed">
-                                    想要自己設定專屬的「系統提示詞」？在這裡將它打造成專屬長照助理！
-                                </p>
+                                <p class="text-gray-700 text-sm leading-relaxed">想要自己設定專屬的「系統提示詞」？在這裡將它打造成專屬長照助理！</p>
                             </div>
                             <div class="sketch-box bg-purple-50 border-purple-300 p-4 hover:-translate-y-1 transition-transform">
                                 <h3 class="text-lg font-bold text-purple-800 mb-1 flex items-center">
                                     <span class="mr-2 text-2xl">🌌</span> 
-                                    <div>
-                                        Project Antigravity<br>
-                                        <span class="text-xs font-normal text-gray-500">探索未來的 AI 互動</span>
-                                    </div>
+                                    <div>Project Antigravity<br><span class="text-xs font-normal text-gray-500">探索未來的 AI 互動</span></div>
                                 </h3>
-                                <p class="text-gray-700 text-sm leading-relaxed">
-                                    突破傳統對話視窗限制，探索 AI Agent 機制，看見協作的無限可能！
-                                </p>
+                                <p class="text-gray-700 text-sm leading-relaxed">突破傳統對話視窗限制，探索 AI Agent 機制，看見協作的無限可能！</p>
                             </div>
                         </div>
 
-                        <!-- 右側：內嵌 YouTube 影片 -->
                         <div class="flex-1 flex flex-col justify-center">
                             <div class="sketch-box p-4 bg-white w-full border-dashed border-2 border-gray-400 relative">
                                 <div class="absolute -left-3 -top-3 text-3xl transform -rotate-12">📺</div>
                                 <h4 class="font-bold text-md mb-2 text-center text-gray-800">課後自我增進 (推薦影片)</h4>
-                                
                                 <div class="w-full aspect-video rounded-lg overflow-hidden shadow-inner border border-gray-200">
                                     <iframe class="w-full h-full" src="https://www.youtube.com/embed/2hbYCe_E5aU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                                 </div>
-                                
                                 <div class="text-center mt-3">
                                     <a href="https://www.youtube.com/watch?v=2hbYCe_E5aU&list=PLWWZkn1dW3eAvSZfJv0-02q27JIsfbN2f" target="_blank" class="inline-block text-blue-600 hover:text-blue-800 font-bold text-sm bg-blue-50 px-4 py-1.5 rounded-full transition-colors hover:bg-blue-100">
                                         👉 點此開啟 YouTube 完整清單
@@ -588,22 +768,21 @@
                         </div>
                     </div>
                     
-                    <!-- 完課祝賀詞 -->
                     <div class="mt-6 text-center text-red-600 font-bold text-xl animate-bounce" id="finishText" style="display:none;">
-                        ✨ 恭喜完成培訓！準備好用 AI 顛覆長照工作了嗎？ ✨
+                        ✨ 恭喜完成培訓！期待你們的精彩作業！ ✨
                     </div>
                 </div>
             </div>
-
-        </div> <!-- /slides-wrapper -->
+        </div>
+<!-- /slides-wrapper -->
 
         <!-- 底部控制列 -->
-        <div class="controls">
-            <button class="nav-btn" id="prevBtn" disabled>
+        <div class="controls flex-wrap md:flex-nowrap justify-center gap-4">
+            <button class="nav-btn whitespace-nowrap" id="prevBtn" disabled>
                 <span>👈</span> 上一頁
             </button>
-            <div class="flex gap-3" id="dotsContainer"></div>
-            <button class="nav-btn" id="nextBtn">
+            <div class="flex flex-wrap justify-center items-center gap-1.5 md:gap-2 px-2" id="dotsContainer" style="max-width: 60%;"></div>
+            <button class="nav-btn whitespace-nowrap" id="nextBtn">
                 下一頁 <span>👉</span>
             </button>
         </div>
@@ -636,7 +815,7 @@
                 一 石 二 <span id="gameBlank" class="text-purple-500 border-b-4 border-purple-500 inline-block w-12 text-center">?</span>
             </div>
             
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
                 <button onclick="checkGame('錯', this)" class="interactive-btn bg-gray-200 hover:bg-gray-300 text-2xl font-bold py-3 rounded-lg">兔</button>
                 <button onclick="checkGame('對', this)" class="interactive-btn bg-gray-200 hover:bg-gray-300 text-2xl font-bold py-3 rounded-lg">鳥</button>
             </div>
