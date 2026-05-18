@@ -630,7 +630,7 @@
                     <h2 class="text-3xl font-bold mb-6 title-underline text-blue-800">📇 實戰 2：感控規範轉學習卡</h2>
                     <div class="prompt-box bg-blue-50 p-6 border-2 border-dashed border-blue-300 rounded-lg relative shadow-sm text-left">
                         <button onclick="copyPrompt(this)" class="absolute top-4 right-4 bg-blue-100 text-blue-800 border border-blue-300 px-3 py-1.5 rounded shadow hover:bg-blue-200 transition-colors font-bold text-sm z-10 flex items-center gap-1">📋 一鍵複製</button>
-                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed pr-24 text-sm">請根據以下的感控規範，為新進照服員製作 3 題「選擇題隨堂考」，以及 3 張重點「雙面字卡(Flashcards)」（正面問題，反面答案）。
+                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed pr-24 border-blue-300">請根據以下的感控規範，為新進照服員製作 3 題「選擇題隨堂考」，以及 3 張重點「雙面字卡(Flashcards)」（正面問題，反面答案）。
 
 【洗手規範】
 洗手時機：接觸住民前、執行無菌技術前、接觸住民後、接觸住民周圍環境後、暴露體液風險後。洗手步驟必須落實「內外夾弓大立腕」，並搓揉至少 20 秒。</div>
@@ -644,7 +644,7 @@
                     <h2 class="text-3xl font-bold mb-6 title-underline text-blue-800">📽️ 實戰 3：企劃案轉早會簡報</h2>
                     <div class="prompt-box bg-blue-50 p-6 border-2 border-dashed border-blue-300 rounded-lg relative shadow-sm text-left">
                         <button onclick="copyPrompt(this)" class="absolute top-4 right-4 bg-blue-100 text-blue-800 border border-blue-300 px-3 py-1.5 rounded shadow hover:bg-blue-200 transition-colors font-bold text-sm z-10 flex items-center gap-1">📋 一鍵複製</button>
-                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed pr-24 text-sm">請將以下企劃，建立適合早會報告的摘要簡報。含：封面、主旨、時間地點、分工表、突發應變。
+                        <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed pr-24">請將以下企劃，建立適合早會報告的摘要簡報。含：封面、主旨、時間地點、分工表、突發應變。
 
 【企劃】
 中秋卡拉OK大賽，9/15 14:00-16:00 大交誼廳。
@@ -697,8 +697,61 @@
                 </div>
             </div>
 
-            <!-- Slide 15: 【核心實戰1】防跌風險計算機 -->
+            <!-- Slide 15: 【全新概念頁】 什麼是 Vibe Coding？ -->
             <div class="slide" id="slide-15">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-4 title-underline text-purple-900">💡 觀念建立：什麼是 Vibe Coding (感覺開發)？</h2>
+                    <p class="text-lg text-gray-700 mb-6 text-center leading-relaxed">
+                        「不懂半行程式碼？別擔心！AI 時代我們只憑專業直覺（Vibe）來共同創作。」
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl mx-auto">
+                        <!-- 左側：Vibe 核心定義 -->
+                        <div class="sketch-box bg-purple-50 border-purple-300 p-6 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-purple-800 mb-3 flex items-center gap-1">
+                                    <span>🧠</span> Vibe Coding 黃金公式
+                                </h3>
+                                <p class="text-gray-700 text-sm leading-relaxed mb-4">
+                                    以前做軟體需要找工程師，現在你唯一的任務是扮演**「福祉課大督導 (產品導演)」**。
+                                </p>
+                                <p class="text-gray-600 text-xs leading-relaxed">
+                                    我們只需要精準描述想要的畫面、選取不合適的段落。Gemini Canvas 會扮演一秒產出、淚流滿面的**「爆肝工程師」**！
+                                </p>
+                            </div>
+                            <div class="bg-white p-3 border border-purple-200 rounded text-center text-xs font-bold text-purple-900 mt-4 shadow-sm">
+                                🎯 核心精神：你負責出直覺，AI 負責寫細節！
+                            </div>
+                        </div>
+                        
+                        <!-- 右側：氛圍開發三步走 -->
+                        <div class="sketch-box bg-white border-dashed border-2 border-gray-400 p-6 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-1">
+                                    <span>🧭</span> 如何跟著督導 Vibe 出神裝？
+                                </h3>
+                                <ul class="list-decimal pl-5 space-y-2.5 text-gray-700 text-xs font-bold">
+                                    <li>
+                                        <span class="text-purple-800">大膽妄想</span>：<br>
+                                        用紙筆或白話文，畫出痛點的解決流程。
+                                    </li>
+                                    <li>
+                                        <span class="text-purple-800">自然語言溝通</span>：<br>
+                                        使用 PARTS 公式，叫 AI 一秒把網頁骨架生在右側畫布上。
+                                    </li>
+                                    <li>
+                                        <span class="text-purple-800">滑鼠「選取」微調</span>：<br>
+                                        滑鼠選取按鈕或輸入欄，下令「把字加大、顏色調成喜慶綠」，直到 Vibe（感覺）對了就收工！
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 16: 【核心實戰1】防跌風險計算機 -->
+            <div class="slide" id="slide-16">
                 <div class="slide-content">
                     <h2 class="text-3xl font-bold mb-4 title-underline text-purple-900">🛠️ 帶領同仁作戰：5分鐘做出「防跌風險計算機」</h2>
                     <p class="text-gray-700 mb-4 text-sm">
@@ -742,8 +795,8 @@
                 </div>
             </div>
 
-            <!-- Slide 16: 【核心實戰2】政府「住宿式機構補助一鍵試算與諮詢對話產生器」 -->
-            <div class="slide" id="slide-16">
+            <!-- Slide 17: 【核心實戰2】政府住宿式機構補助一鍵試算與諮詢對話產生器 -->
+            <div class="slide" id="slide-17">
                 <div class="slide-content">
                     <h2 class="text-3xl font-bold mb-4 title-underline text-orange-900">🛠️ 社工神兵：5分鐘做出「機構補助試算與家屬諮詢助理」</h2>
                     <p class="text-gray-700 mb-4 text-sm">
@@ -781,7 +834,7 @@
                                     社工同仁可以如何在 Canvas 中「選取」局部並微調？
                                 </p>
                                 <ul class="list-disc pl-4 space-y-1.5 text-gray-600 mt-2 font-bold text-xs">
-                                    <li><span class="text-orange-700">選取法規說明區</span> ➔ 輸入：「幫我加上一鍵連結至衛理公會或衛福部官網申請專區的按鈕。」</li>
+                                    <li><span class="text-orange-700">選取法規說明區</span> ➔ 輸入：「幫我加上一鍵連結至衛福部官網申請專區的按鈕。」</li>
                                     <li><span class="text-orange-700">選取話術範本</span> ➔ 輸入：「話術幫我修改得更溫暖、更接地氣，並加入集團內部社福金救助申請的引導。」</li>
                                     <li><span class="text-orange-700">一鍵部署</span> ➔ 上線後，社工隨身用手機或 iPad 即可當場幫家屬試算！</li>
                                 </ul>
@@ -794,8 +847,53 @@
                 </div>
             </div>
 
-            <!-- Slide 17: 基礎求生技能 -->
-            <div class="slide" id="slide-17">
+            <!-- Slide 18: 【核心實戰3】照護互動：5分鐘做出「長輩手繪圖案猜謎健腦遊戲」 -->
+            <div class="slide" id="slide-18">
+                <div class="slide-content">
+                    <h2 class="text-3xl font-bold mb-4 title-underline text-purple-900">🛠️ 照護遊戲：5分鐘做出「長輩手繪猜謎健腦小網頁」</h2>
+                    <p class="text-gray-700 mb-4 text-sm">
+                        帶領社工、生服與督導同仁現場瘋狂的經典範例！用最簡單的網頁代碼，給長輩一個親切拿平板「手繪作畫」的復健大舞台。
+                    </p>
+                    
+                    <div class="flex flex-col md:flex-row gap-4 w-full text-xs">
+                        <div class="prompt-box bg-purple-50 p-4 border-2 border-dashed border-purple-400 rounded-lg relative flex-1 text-left">
+                            <button onclick="copyPrompt(this)" class="absolute top-2 right-2 bg-purple-600 text-white border border-purple-700 px-2 py-1 rounded shadow hover:bg-purple-700 transition-colors font-bold text-[10px] z-10">📋 複製手繪遊戲指令</button>
+                            <div class="prompt-content font-mono text-gray-800 whitespace-pre-wrap leading-relaxed text-[11px] h-[220px] overflow-y-auto">請扮演「住宿式長照機構資深復健社工與網頁前端設計師」(P)，幫我開啟畫布寫一個單頁 HTML 格式、完全自帶電池的【長輩手繪圖形健腦猜謎小遊戲】(A,T)。
+
+【介面要求】(S)
+1. 版面必須超級溫馨、底色為米黃色，所有字體要放大（18px以上），以利長輩閱讀。
+2. 畫面中央規劃一個 400x300 的「大畫板區域」（用 HTML5 Canvas 實現），畫板外框需有 3px 粗實線，背景為乾淨純白。
+3. 頂端顯示出題內容，例如「請在白色畫布上畫一顆【蘋果】」或「請畫出一個【圓形】」。
+4. 畫板下方有兩個超大按鈕：「重新清除畫板」、「我畫好了！讓 AI 猜猜看」。
+
+【邏輯要求】
+- 長輩可以直接用手指觸碰（或滑鼠拖曳）在畫板上順暢繪圖，畫筆為紅色、粗度為 5。
+- 點擊「清除畫板」時，完全清空白色畫板。
+- 點擊「猜猜看」按鈕時，畫面上會彈出「思考中...」的可愛加載動畫，並在 2 秒後隨機挑選一句充滿同理心與幽默感的語氣猜出長輩畫的是什麼（例如：「這飽滿又圓滾滾的線條，一定是又大又甜的富士蘋果吧！」、「這完美的弧度，該不會是剛出爐、熱騰騰的紅豆餅吧！」），隨後彈出漫天飛舞的撒花特效！</div>
+                        </div>
+
+                        <div class="sketch-box bg-white p-4 flex-1 border-purple-300 relative flex flex-col justify-between">
+                            <div>
+                                <span class="action-badge bg-purple-800">遊戲微調技巧</span>
+                                <p class="text-gray-700 leading-relaxed font-semibold mt-2 text-sm">
+                                    活動與社工同仁可以如何在 Canvas 中進行「選取」微調？
+                                </p>
+                                <ul class="list-disc pl-4 space-y-1.5 text-gray-600 mt-2 font-bold text-xs">
+                                    <li><span class="text-purple-700">選取題目判定區</span> ➔ 輸入：「幫我把出題清單新增：【太陽】、【飯糰】、【愛心】，讓題目更適合長照長輩。」</li>
+                                    <li><span class="text-purple-700">選取題目大標題</span> ➔ 輸入：「幫我把出題文字加入閩南語發音提示，例如畫一粒【圓仔】（圓形），讓失智長輩更有熟悉感。」</li>
+                                    <li><span class="text-purple-700">一鍵部署</span> ➔ 直接用平板或 iPad 拖曳上線，現場遞給阿公，早會活動氣氛瞬間拉滿！</li>
+                                </ul>
+                            </div>
+                            <div class="bg-yellow-100 p-2 border border-yellow-300 rounded text-[11px] font-bold text-yellow-900 leading-relaxed text-center">
+                                💡 不用等大廠開發，用 AI 只要 5 分鐘，社工自己就能為病房寫出一整套認知活動復健教材！
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 19: 基礎求生技能 -->
+            <div class="slide" id="slide-19">
                 <div class="slide-content">
                     <h2 class="text-3xl font-bold mb-4 title-underline text-orange-800">🛠️ 基礎求生：怎麼打開 AI 寫的網頁？</h2>
                     <p class="text-lg text-gray-700 mb-4 tracking-wide">AI 幫你寫出程式碼後，不需要安裝任何軟體，用 Windows 內建「記事本」就能測試：</p>
@@ -806,7 +904,7 @@
                             <ul class="space-y-3 text-gray-700 font-bold">
                                 <li><span class="bg-orange-100 px-2 py-1 rounded border border-orange-300">1</span> 打開記事本，把 AI 給的 HTML 碼貼上。</li>
                                 <li><span class="bg-orange-100 px-2 py-1 rounded border border-orange-300">2</span> 左上角點擊「檔案」 ➔ 「另存新檔」。</li>
-                                <li><span class="bg-orange-100 px-2 py-1 rounded border border-orange-300">3</span> 檔名輸入 <span class="text-blue-600">"index.html"</span>，按下存檔. </li>
+                                <li><span class="bg-orange-100 px-2 py-1 rounded border border-orange-300">3</span> 檔名輸入 <span class="text-blue-600">"index.html"</span>，按下存檔。</li>
                             </ul>
                             <div class="mt-4 text-center">
                                 👉 <span class="text-sm font-normal text-gray-500">最後對著檔案「雙擊滑鼠」就可以用瀏覽器打開囉！</span>
@@ -837,8 +935,8 @@
                 </div>
             </div>
 
-            <!-- Slide 18: Netlify Drop 部署教學 -->
-            <div class="slide" id="slide-18">
+            <!-- Slide 20: Netlify Drop 部署教學 -->
+            <div class="slide" id="slide-20">
                 <div class="slide-content">
                     <h2 class="text-3xl font-bold mb-4 title-underline text-green-800">🚀 一秒上線：Netlify Drop 拖曳大法</h2>
                     <p class="text-lg text-gray-700 mb-6 tracking-wide text-center">最適合初學者的神器！免學程式碼，拖拉放一秒獲得專屬網址！</p>
@@ -872,8 +970,8 @@
                 </div>
             </div>
             
-            <!-- Slide 19: 科普小知識：靜態 vs 動態網頁 -->
-            <div class="slide" id="slide-19">
+            <!-- Slide 21: 科普小知識：靜態 vs 動態網頁 -->
+            <div class="slide" id="slide-21">
                 <div class="slide-content">
                     <h2 class="text-3xl font-bold mb-6 title-underline text-center w-full block">💡 科普小知識：靜態 vs 動態網頁</h2>
                     <p class="text-lg text-gray-700 mb-6 text-center">為什麼我們剛才丟上去 Netlify 的網頁，馬上就能動？</p>
@@ -881,7 +979,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-6 max-w-4xl mx-auto">
                         <div class="sketch-box bg-green-50 p-6 border-2 border-green-300 relative">
                             <h3 class="font-bold text-xl text-green-800 mb-3 flex items-center">📄 靜態網頁 (我們今天做的)</h3>
-                            <p class="text-gray-700 mb-3 text-sm leading-relaxed font-bold">就像一個「自帶電池的小玩具」。</p>
+                            <p class="text-gray-700 mb-3 text-sm leading-relaxed font-bold">放置一個「自帶電池的小玩具」。</p>
                             <p class="text-gray-600 text-sm">外觀、文字、遊戲邏輯全部打包在同一個檔案裡。不需要複雜的後台支援，打開直接跑！</p>
                             <div class="bg-green-100 p-2 mt-3 rounded text-center text-xs font-bold text-green-900">範例：宣傳單、衛教圖卡、簡單小遊戲、計算機</div>
                         </div>
@@ -896,8 +994,8 @@
                 </div>
             </div>
 
-            <!-- Slide 20: 資安紅線 -->
-            <div class="slide" id="slide-20">
+            <!-- Slide 22: 資安紅線 -->
+            <div class="slide" id="slide-22">
                 <div class="slide-content">
                     <h2 class="text-3xl font-bold mb-8 title-underline text-center w-full block">🛡️ 資安紅線與 AI 素養</h2>
                     
@@ -924,48 +1022,54 @@
                 </div>
             </div>
 
-            <!-- Slide 21: 課後作業 -->
-            <div class="slide" id="slide-21">
+            <!-- Slide 23: 課後作業 (全面修改為單一焦點「製作網頁或小工具」與重新排版) -->
+            <div class="slide" id="slide-23">
                 <div class="slide-content">
-                    <h2 class="text-3xl font-bold mb-6 title-underline text-center w-full block">💪 課後實戰作業 (跨格式挑戰)</h2>
-                    <div class="sketch-box bg-yellow-50 border-2 border-yellow-400 p-8 mx-auto max-w-4xl shadow-lg">
-                        <h3 class="text-2xl font-bold text-yellow-800 mb-4 text-center">🛠️ 任務：將文字「轉生」為實用工具</h3>
-                        <p class="text-lg text-gray-700 mb-4 leading-relaxed text-center font-semibold">
-                            請找出一份工作上常用的文字資料（如 SOP、公文、企劃案、衛教單），貼進 Canvas 中，並使用「Create」或其他功能，<span class="font-bold text-red-600">完成以下四選一的任務</span>：
+                    <h2 class="text-3xl font-bold mb-5 title-underline text-center w-full block">💪 課後實戰作業：打造專屬長照小工具</h2>
+                    <div class="sketch-box bg-yellow-50 border-2 border-yellow-400 p-6 mx-auto max-w-4xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-yellow-800 mb-3 text-center">🛠️ 實戰任務：設計、微調並部署「專屬互動網頁」</h3>
+                        <p class="text-base text-gray-700 mb-4 leading-relaxed text-center font-semibold">
+                            請找出一份您日常工作上最常遇到的痛點或文字資料（如：SOP規範、衛教單、早會企劃、或是排班與額度計算公式），使用 Gemini Canvas <span class="font-bold text-red-600">做出一個具有實用價值的網頁小工具</span>！
                         </p>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-4 mb-6">
-                            <div class="bg-white p-3 border rounded text-center shadow-sm">
-                                <h4 class="font-bold text-blue-700 text-lg mb-1">1. 🌐 製作網頁/小工具</h4>
-                                <p class="text-sm text-gray-600">製作一個小遊戲 or 計算機，並用 Netlify 取得專屬網址。</p>
-                            </div>
-                            <div class="bg-white p-3 border rounded text-center shadow-sm">
-                                <h4 class="font-bold text-green-700 text-lg mb-1">2. 📊 資訊圖表</h4>
-                                <p class="text-sm text-gray-600">將枯燥的健康數據或排班表，變成一目瞭然的表格與摘要。</p>
-                            </div>
-                            <div class="bg-white p-3 border rounded text-center shadow-sm">
-                                <h4 class="font-bold text-purple-700 text-lg mb-1">3. 📇 學習卡與測驗</h4>
-                                <p class="text-sm text-gray-600">將規範手冊轉換成教育訓練專用的互動測驗或雙面字卡。</p>
-                            </div>
-                            <div class="bg-white p-3 border rounded text-center shadow-sm">
-                                <h4 class="font-bold text-orange-700 text-lg mb-1">4. 📽️ 簡報大綱</h4>
-                                <p class="text-sm text-gray-600">將落落長的企劃案，提煉成可直接上台報告的分頁簡報。</p>
+                        <!-- 手寫風三步走黃金路線圖 -->
+                        <div class="bg-white p-5 border-2 border-dashed border-yellow-300 rounded-xl mb-4 text-sm space-y-4">
+                            <h4 class="font-bold text-lg text-purple-800 border-b pb-1.5 flex items-center gap-1.5 justify-center">
+                                🚀 小工具全生命週期開發路線圖
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                                <div class="bg-purple-50 p-3 rounded-lg border border-purple-200">
+                                    <span class="text-xs bg-purple-200 text-purple-800 font-bold px-2 py-0.5 rounded-full">第 1 步</span>
+                                    <p class="font-bold mt-1 text-xs">下達 PARTS 指令</p>
+                                    <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">確立角色(P)與結構要求(S)，指揮 AI 開啟畫布生成初始 HTML 代碼。</p>
+                                </div>
+                                <div class="bg-orange-50 p-3 rounded-lg border border-orange-200">
+                                    <span class="text-xs bg-orange-200 text-orange-800 font-bold px-2 py-0.5 rounded-full">第 2 步</span>
+                                    <p class="font-bold mt-1 text-xs">選取局部微調</p>
+                                    <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">用滑鼠「選取」特定按鈕或輸入框，輸入指令，將字體加大、外觀變好看。</p>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg border border-green-200">
+                                    <span class="text-xs bg-green-200 text-green-800 font-bold px-2 py-0.5 rounded-full">第 3 步</span>
+                                    <p class="font-bold mt-1 text-xs">部署上線與掃碼</p>
+                                    <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">用記事本存成 index.html，拖入 Netlify 部署，右鍵為網頁產生 QR Code！</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="bg-white p-4 border-l-4 border-yellow-500 rounded text-center">
-                            <p class="text-gray-800 font-bold">✅ 繳交方式：</p>
-                            <p class="text-gray-600 text-sm mt-1 leading-relaxed">
-                                完成後，請將畫面截圖，或是繳交您的 Netlify 網址 / QR Code。<br>
-                                <span class="text-red-600 font-bold bg-yellow-100 px-1 rounded">⚠️ 繳交指定：請依課程規定，將作業上傳至指定的繳交路徑。</span>
+                        <!-- 繳交說明 -->
+                        <div class="bg-white p-4 border-l-4 border-yellow-500 rounded text-xs">
+                            <p class="text-gray-800 font-bold text-sm text-center">✅ 繳交方式：</p>
+                            <p class="text-gray-600 mt-1 leading-relaxed font-semibold text-center">
+                                完成部署後，請將您的 <span class="text-blue-600 font-bold">Netlify 專屬網址</span> 或 <span class="text-red-600 font-bold">小工具 QR Code 截圖</span> 上傳至指定的繳交路徑。<br>
+                                期待在清福福祉課看見大家的精采創意，讓我們用 AI 手工藝，一起消除繁瑣的行政重擔！
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 22: 結語與進階探索 -->
-            <div class="slide" id="slide-22">
+            <!-- Slide 24: 結語與進階探索 -->
+            <div class="slide" id="slide-24">
                 <div class="slide-content">
                     <h2 class="text-3xl font-bold mb-4 title-underline text-center w-full block">🚀 讓演算法帶領你：探索 AI 無限世界</h2>
                     <p class="text-lg text-gray-700 mb-5 tracking-wide text-center">Canvas 只是起點！點擊影片探索更多 AI 玩法：</p>
@@ -1017,7 +1121,7 @@
             <button class="nav-btn whitespace-nowrap" id="prevBtn" disabled>
                 <span>👈</span> 上一頁
             </button>
-            <div class="flex flex-wrap justify-center items-center gap-1.5 md:gap-2 px-2" id="dotsContainer" style="max-width: 60%;"></div>
+            <div class="flex flex-wrap justify-center items-center gap-1 md:gap-1.5 px-2" id="dotsContainer" style="max-width: 60%;"></div>
             <button class="nav-btn whitespace-nowrap" id="nextBtn">
                 下一頁 <span>👉</span>
             </button>
@@ -1085,10 +1189,8 @@
                 canvas.height = rect.height; 
             }
         }
-        // 監聽視窗縮放
         window.addEventListener('resize', resizeCanvas);
 
-        // 關鍵防呆 1：等網頁與樣式完全載入完畢再抓取，並給予 100ms 緩衝
         window.addEventListener('load', () => {
             setTimeout(resizeCanvas, 100);
         });
@@ -1098,7 +1200,6 @@
             drawToggleBtn.classList.toggle('active'); eraserBtn.classList.remove('active');
             
             if (isDrawingMode) {
-                // 關鍵防呆 2：開筆刷時，若偵測到畫布寬高仍為 0，立刻強制補抓尺寸！
                 if (canvas.width === 0 || canvas.height === 0) {
                     resizeCanvas();
                 }
@@ -1120,7 +1221,6 @@
 
         clearBtn.addEventListener('click', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
 
-        // 完美相容滑鼠、iPad 觸控筆、與手機觸控的全方位座標解算器
         function getEventCoords(e) {
             const rect = canvas.getBoundingClientRect();
             let clientX = 0;
@@ -1200,7 +1300,7 @@
                 aiMsg = "好的，我已將王爺爺的交班摘要大幅精簡，只保留核心臨床發現。";
                 p1.innerText = "王爺爺上午焦躁探詢配偶，已予口頭安慰支持。";
                 p2.innerHTML = "午餐有<span class='bg-yellow-200 cursor-pointer relative px-1 py-0.5 rounded hover:bg-yellow-300 transition-colors inline border-b-2 border-dashed border-yellow-500' onclick='toggleFloatingMenu(event)' id='highlightSpan'>拒食吐菜</span>情形。";
-                p3.innerText = "下午拼圖活動受挫躁動，經安撫後引導平靜。";
+                p3.innerText = "下午拼圖活動受挫躁動，經安撫後引導平靜. ";
                 showToast('📏', '全文內容已精簡！長度縮短！');
             } else if (type === 'reset') {
                 userMsg = "把剛才右邊改動的內容還原，我想重來。";
@@ -1303,13 +1403,17 @@
             }
             slidesWrapper.scrollTop = 0;
             
-            // 修正定位：第5頁(Sandbox) 索引是 4，第15頁(防跌倒) 索引是 14，第16頁(機構補助計算) 索引是 15
+            // 修正定位：第5頁(Sandbox) 索引是 4，第15頁(Vibe Coding) 索引是 14，第16頁(防跌倒) 索引是 15，第17頁(社工試算) 索引是 16，第18頁(手繪猜謎) 索引是 17
             if (currentSlide === 4) {
                 setTimeout(() => { showToast('🎮', '您已進入 1:1 沙盒模擬區，點擊左側對話框或右側黃字試玩！'); }, 1000);
             } else if (currentSlide === 14) {
-                setTimeout(() => { showToast('🛠️', '進入照護實戰章節！複製左方指令，體驗零代碼系統生成！'); }, 1000);
+                setTimeout(() => { showToast('💡', '歡迎來到 Vibe Coding 氛圍開發！現在你只要動口，AI 就能幫你實現系統！'); }, 1000);
             } else if (currentSlide === 15) {
+                setTimeout(() => { showToast('🛠️', '進入照護實戰章節！複製左方指令，體驗零代碼系統生成！'); }, 1000);
+            } else if (currentSlide === 16) {
                 setTimeout(() => { showToast('💼', '社工同仁看過來！複製左方指令，一秒完成住宿式補助試算與家屬溝通！'); }, 1000);
+            } else if (currentSlide === 17) {
+                setTimeout(() => { showToast('🎨', '最受歡迎的手繪猜謎！複製左方指令，給長輩一個親手繪圖的舞台！'); }, 1000);
             }
         }
 
